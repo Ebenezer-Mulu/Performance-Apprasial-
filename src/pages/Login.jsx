@@ -1,42 +1,56 @@
 import styled from "styled-components";
 import LoginForm from "../features/authentication/LoginForm";
 import Logo from "../ui/Logo";
-import Row from "../ui/Row";
-import Info from "../ui/info";
+import Heading from "../ui/Heading";
+import { useState } from "react";
 
-
-
-const LoginLayout = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
+const LoginLayout = styled.main`
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 48rem;
+  align-content: center;
+  justify-content: center;
+  gap: 3.2rem;
+  background-color: var(--color-grey-50);
 `;
-
-const LogoContainer = styled.div`
-  flex: 1;
-  background-color: #000;
-  height: 100vh;
-  `
-
-const FormContainer = styled.div`
-padding: 7rem ;
-  flex: 1;
+const StyledLoginSection = styled.section`
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
 `;
-
+const ForgotPasswordLink = styled.a`
+  color: var(--color-primary);
+  text-decoration: underline;
+  margin-top: 1rem;
+  margin-left: 13rem;
+  cursor: pointer;
+`;
+const RememberMeCheckbox = styled.input.attrs({ type: "checkbox" })`
+  margin-top: 1rem;
+`;
 function Login() {
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const handleRememberMeChange = () => {
+    setRememberMe(!rememberMe);
+  };
   return (
     <LoginLayout>
-      <LogoContainer>
-        <Row>
-          <Logo />
-          <Info/>
-        </Row>
-
-      </LogoContainer>
-      <FormContainer>
+      <StyledLoginSection>
+        <Logo />
+        <Heading as="h4">WKU EPAS</Heading>
         <LoginForm />
-      </FormContainer>
+        <RememberMeCheckbox
+          id="rememberMe"
+          checked={rememberMe}
+          onChange={handleRememberMeChange}
+        />
+        <label htmlFor="rememberMe"> Remember Me</label>
+        <ForgotPasswordLink href="/forgot-password">
+          Forgot Password?
+        </ForgotPasswordLink>
+      </StyledLoginSection>
     </LoginLayout>
   );
 }

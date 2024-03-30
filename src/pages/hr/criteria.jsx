@@ -13,7 +13,7 @@ const Criteria = () => {
           <Link to="/hr/addCriteria"> Add Criteria</Link>
         </Button>
       </Row>
-      <CriteriaTable/>
+      <CriteriaTable />
     </>
   );
 };

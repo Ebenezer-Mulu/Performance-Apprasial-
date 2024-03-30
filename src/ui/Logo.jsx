@@ -1,23 +1,23 @@
 import styled from "styled-components";
-import Heading from "./Heading";
+import { useDarkMode } from "../context/DarkModeContext";
 
 const StyledLogo = styled.div`
   text-align: center;
- 
-
 `;
 
 const Img = styled.img`
-  padding-top: 3rem;
-  background: transparent !important;
-
+  height: 9.6rem;
+  width: auto;
 `;
 
 function Logo() {
+  const { isDarkMode } = useDarkMode();
+
+  const src = isDarkMode ? "/logo-dark.png" : "/logo-light.png";
+
   return (
     <StyledLogo>
-      <Img src="/wolkite.jpg" alt="Logo" />
-      <Heading as="h3">Wolkite University</Heading>
+      <Img src={src} alt="Logo" />
     </StyledLogo>
   );
 }

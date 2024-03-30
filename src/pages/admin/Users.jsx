@@ -11,7 +11,7 @@ const Users = () => {
       <Row type="horizontal">
         <Heading as="h1">All Users</Heading>
         <Button>
-          <Link to="../admin/assignrole">Assign Role</Link>
+          <Link to="/admin/assignRole">Assign Role</Link>
         </Button>
       </Row>
       <Search placeholder="Search for User" />

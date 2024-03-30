@@ -7,14 +7,12 @@ const sizes = {
 
     font-weight: 600;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 10px;
   `,
   medium: css`
     font-size: 1.4rem;
     padding: 1.2rem 1.6rem;
     font-weight: 500;
-  
-  
   `,
   large: css`
     font-size: 1.6rem;

@@ -1,7 +1,11 @@
 import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { HiOutlineHome } from "react-icons/hi2";
+import { HiOutlineHome } from "react-icons/hi";
+import { FaBuilding, FaFolderOpen, FaPlus, FaSearch } from "react-icons/fa";
+import { MdPeople } from "react-icons/md";
+import { HiOutlineLogout } from "react-icons/hi";
+import { useUser } from "../features/authentication/useUser";
 
 const NavList = styled.ul`
   display: flex;
@@ -47,59 +51,35 @@ const StyledNavLink = styled(NavLink)`
 `;
 
 const MainNav = () => {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    // Perform logout actions (clear user session, etc.)
-    // For example:
-    localStorage.removeItem("role");
-    localStorage.removeItem("email");
-    // Redirect to login page after logout
-    navigate("/login");
-  };
-
-  const role = localStorage.getItem("role");
-
+  const { user } = useUser();
   const links = {
     admin: [
-      { path: "/admin/dashboard", title: "Home" },
-      { path: "/admin/colleges", title: "Colleges" },
-      { path: "/admin/departments", title: "Departments" },
-      { path: "/admin/users", title: "Users" },
-
-    ],
-    user: [
-      { path: "/user/dashboard", title: "Home" },
-      { path: "/user/colleges", title: "Colleges" },
-      { path: "/user/departments", title: "Departments" },
-      { path: "/users", title: "Users" },
-    ],
-    dean: [
-      { path: "/dean/dashboard", title: "Home" },
-      { path: "/departments", title: "Departments" },
-    ],
-    head: [
-      { path: "/head/dashboard", title: "Home" },
-      { path: "/head/courses", title: "Courses" },
-      { path: "/head/evaluate", title: "Evaluate" },
-      { path: "/head/approve", title: "Approve" },
+      { path: "/admin", title: "Home", icon: <HiOutlineHome /> },
+      { path: "/admin/colleges", title: "Colleges", icon: <FaBuilding /> },
+      {
+        path: "/admin/departments",
+        title: "Departments",
+        icon: <FaFolderOpen />,
+      },
+      { path: "/admin/users", title: "Users", icon: <MdPeople /> },
     ],
     hr: [
-      { path: "/hr/dashboard", title: "Home" },
-      { path: "/hr/user", title: "Add user" },
-      { path: "/hr/criteria", title: " Criterias" },
-      //   { path: "/hr/appraisal/reports", title: "Appraisal Reports" },
+      { path: "/hr/dashboard", title: "Home", icon: <HiOutlineHome /> },
+      { path: "/hr/user", title: "Add User", icon: <FaPlus /> },
+      { path: "/hr/criteria", title: "Criterias", icon: <FaSearch /> },
     ],
   };
 
-  // Add logout link for all roles
-  const CommonLinks = [
-    { path: "/settings", title: "Settings" },
-    { path: "/login", title: "Logout" },
-  
+  const commonLinks = [
+    { path: "/settings", title: "Settings", icon: <FaPlus /> },
+    {
+      path: "/login",
+      title: "Logout",
+      icon: <HiOutlineLogout />,
+    },
   ];
 
-  const roleLinks = links[role] || [];
+  const roleLinks = links[user.role];
 
   return (
     <nav>
@@ -107,20 +87,19 @@ const MainNav = () => {
         {roleLinks.map((link, index) => (
           <li key={index}>
             <StyledNavLink to={link.path} activeClassName="active">
-              <HiOutlineHome />
+              {link.icon}
               {link.title}
             </StyledNavLink>
           </li>
         ))}
-
-        {CommonLinks.map((link, index) => (
+        {commonLinks.map((link, index) => (
           <li key={index}>
             <StyledNavLink
               to={link.path}
-            
               activeClassName="active"
+              onClick={link.onClick}
             >
-              <HiOutlineHome />
+              {link.icon}
               {link.title}
             </StyledNavLink>
           </li>

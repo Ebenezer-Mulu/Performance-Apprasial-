@@ -12,13 +12,12 @@ import MenuItem from "@mui/material/MenuItem";
 import Row from "../../ui/Row";
 
 const User = () => {
+  console.log("in user Page");
   const [value, setValue] = useState("1");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  
 
   const isLastTab = value === "3";
 

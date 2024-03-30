@@ -29,26 +29,15 @@ const Modal = (props) => {
     title,
     children,
     open,
-    width,
     onSubmit,
+    width,
     handleClose,
     error,
     isLoading,
-    formValues, // Added prop for form values
-    setFormValues, // Added prop for updating form values
   } = props;
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-  };
-
   const handleSubmit = () => {
-    // Perform any necessary form data validation before submitting
-    onSubmit(formValues);
+    onSubmit();
   };
 
   return (

@@ -1,40 +1,41 @@
-import { useContext, useState } from "react";
-import styled from "styled-components";
 import { Outlet } from "react-router-dom";
+import Sidebar from "./Sidebar";
 import Header from "./Header";
-import { Box } from "@mui/material";
-import SidebarContext from "../context/sidebar-context";
+import styled from "styled-components";
 
 const StyledAppLayout = styled.div`
   display: grid;
+  grid-template-columns: 26rem 1fr;
+  grid-template-rows: auto 1fr;
   height: 100vh;
-  transition: grid-template-columns 0.3s ease-in-out;
 `;
 
 const Main = styled.main`
   background-color: var(--color-grey-50);
-  padding: 10rem 4.8rem 6.4rem;
+  padding: 4rem 4.8rem 6.4rem;
+  overflow: scroll;
 `;
 
-const AppLayout = () => {
-  const { isSidebarOpen } = useContext(SidebarContext);
+const Container = styled.div`
+  max-width: 120rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+`;
 
+function AppLayout() {
   return (
-    <StyledAppLayout isDrawerOpen={isSidebarOpen}>
-      
-      <Header isDrawerOpen={isSidebarOpen} />
+    <StyledAppLayout>
+      <Header />
+      <Sidebar />
       <Main>
-        <Box
-          sx={{
-            ml: isSidebarOpen ? "0" : "280px",
-            transition: "0.3s",
-          }}
-        >
+        <Container>
           <Outlet />
-        </Box>
+        </Container>
       </Main>
     </StyledAppLayout>
   );
-};
+}
 
-export default AppLayout
+export default AppLayout;
