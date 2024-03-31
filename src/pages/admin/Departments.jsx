@@ -1,28 +1,32 @@
 import React, { useState } from "react";
+import Search from "../../ui/Search";
 import Heading from "../../ui/Heading";
 import Row from "../../ui/Row";
-import Search from "../../ui/Search";
-
 import Button from "../../ui/Button";
-
+import AddDepartment from "./addDepartment";
 import DepartmentTable from "../../features/department/departmentTable";
-
-import { Link } from "react-router-dom";
-
-
 const Departments = () => {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false); //
 
+  const openAddModal = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const closeAddModal = () => {
+    setIsAddModalOpen(false);
+  };
 
   return (
     <>
       <Row type="horizontal">
         <Heading as="h1">All Departments</Heading>
-        <Button ><Link to='/admin/addDepartment'> Add Department</Link> </Button>
+        <Button onClick={openAddModal}>Add Department</Button>
       </Row>
-      <Search placeholder="Search for department" />
+      <Search placeholder="Search for college" />
       <DepartmentTable />
-
-    
+      {isAddModalOpen && (
+        <AddDepartment open={isAddModalOpen} closeModal={closeAddModal} />
+      )}
     </>
   );
 };
