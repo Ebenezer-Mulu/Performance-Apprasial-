@@ -5,12 +5,50 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "../../ui/Button";
 import Table from "../../ui/Table";
 import { useAllUser } from "../../features/Users/UseAllUser";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+const assignRole = async (roleMappings) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.patch(
+      "http://localhost:5000/api/v1/users/assign-role",
+      roleMappings,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to assign role");
+  }
+};
 const AssignRole = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { mutate } = useMutation({
+    mutationFn: assignRole,
+    onSuccess: () => {
+      toast.success("Role assigned and password sent via email successfully");
+      queryClient.invalidateQueries("employee");
+      navigate("/admin/users");
+    },
+    onError: (err) => {
+      console.log("ERROR", err);
+      toast.error("Failed to Assign Role");
+    },
+  });
   const [selectedRoles, setSelectedRoles] = useState({});
   const { users, isLoading, error } = useAllUser();
   const columns = [
-    { field: "fname_lname", headerName: "Full Name", width: 300 },
+    { field: "fname", headerName: "First Name", width: 200 },
+    { field: "lname", headerName: "Last Name", width: 200 },
     { field: "cemail", headerName: "Email", width: 200 },
     {
       field: "role",
@@ -19,12 +57,12 @@ const AssignRole = () => {
       renderCell: (params) => (
         <Formik initialValues={{ role: "" }} onSubmit={() => {}}>
           <Field
-            name={`role-${params.row.id}`}
+            name={`${params.row.id}`}
             as={Select}
             fullWidth
             onChange={(e) => {
               const updatedRoles = { ...selectedRoles };
-              updatedRoles[`role-${params.row.id}`] = e.target.value;
+              updatedRoles[`${params.row.id}`] = e.target.value;
               setSelectedRoles(updatedRoles);
             }}
           >
@@ -35,7 +73,6 @@ const AssignRole = () => {
             <MenuItem value="teamLeader">Team Leader</MenuItem>
             <MenuItem value="head">Head</MenuItem>
             <MenuItem value="dean">Dean</MenuItem>
-            <MenuItem value="teamLeader">Team Leader</MenuItem>
             <MenuItem value="adminstrative">Adminstrative</MenuItem>
             <MenuItem value="hr">Hr</MenuItem>
             <MenuItem value="assistance">Assistance</MenuItem>
@@ -52,45 +89,10 @@ const AssignRole = () => {
     return <p>Error: {error.message}</p>;
   }
 
-  const rows = users.filter((user) => {
-    console.log(user.role === undefined);
-    console.log(user.role);
-  });
-
-  console.log(rows);
+  const rows = users.filter((user) => user.role === undefined);
 
   const handleClick = async () => {
-    console.log("Selected Roles:", selectedRoles);
-
-    // Assuming selectedRoles is an object with userId as keys and role as values
-    for (const userId in selectedRoles) {
-      const role = selectedRoles[userId];
-
-      try {
-        // Extract the actual user ID from the key (role-bff5)
-        const actualUserId = userId.split("-")[1];
-
-        // Make a PATCH request to update the user's role
-        const response = await fetch(
-          `http://localhost:3000/Users/${actualUserId}`,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ role }),
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`Failed to update role for user ${actualUserId}`);
-        }
-
-        console.log(`Role updated successfully for user ${actualUserId}`);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    mutate(selectedRoles);
   };
 
   return (
@@ -101,11 +103,19 @@ const AssignRole = () => {
           id: row._id,
           cemail: row.email,
           role: row.role,
-          fname_lname: `${row.firstName} ${row.lastName}`,
+          fname: row.firstName,
+          lname: row.lastName,
         }))}
       />
 
-      <Button onClick={handleClick}>Save</Button>
+      <Button
+        style={{ width: "20rem", marginLeft: "40rem" }}
+        variation="primary"
+        size="medium"
+        onClick={handleClick}
+      >
+        Save
+      </Button>
     </>
   );
 };
