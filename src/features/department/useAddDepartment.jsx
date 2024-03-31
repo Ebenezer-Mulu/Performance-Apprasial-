@@ -30,13 +30,12 @@ const addDepartmentAction = async (departmentData) => {
 
 export function useAddDepartment() {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
+
   const { mutate: addNewDepartment, isLoading } = useMutation({
     mutationKey: "[add-department]",
     mutationFn: (depData) => addDepartmentAction(depData),
     onSuccess: () => {
       queryClient.invalidateQueries("departments");
-
       toast.success("Department added successfully");
     },
     onError: (err) => {
