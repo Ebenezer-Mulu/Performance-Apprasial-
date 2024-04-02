@@ -27,6 +27,14 @@ import Courses from "./pages/head/courses";
 import Evaluate from "./pages/head/evaluate";
 import Approve from "./pages/head/approve";
 import ProtectedRoute from "./ui/ProtectedRoute";
+
+
+// Import your Teamleadre pages here
+import TeamleaderDashboard from "./pages/teamleader/dashboard";
+import TmApprove from "./pages/teamleader/TmApprove";
+import TmEvaluate from "./pages/teamleader/TmEvaluate";
+import Userss from "./pages/teamleader/Userss";
+
 // Import other pages here
 
 import PageNotFound from "./pages/PageNotFound";
@@ -87,6 +95,14 @@ const App = () => {
                 <Route path="evaluate" element={<Evaluate />} />
                 <Route path="approve" element={<Approve />} />
               </Route>
+
+              <Route path="teamleader">
+                <Route path="dashboard" element={<TeamleaderDashboard />} />
+                <Route path="users" element={<Userss />} />
+                <Route path="evaluate" element={<TmEvaluate />} />
+                <Route path="approve" element={<TmApprove />} />
+              </Route>
+
             </Route>
             <Route path="login" element={<Login />} />
             <Route

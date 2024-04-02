@@ -68,6 +68,12 @@ const MainNav = () => {
       { path: "/hr/user", title: "Add User", icon: <FaPlus /> },
       { path: "/hr/criteria", title: "Criterias", icon: <FaSearch /> },
     ],
+    teamleader: [
+      { path: "/teamleader/dashboard", title: "Home" , icon: <HiOutlineHome />},
+      { path: "/teamleader/Userss", title: "Users" , icon: <MdPeople />},
+      { path: "/teamleader/TmEvaluate", title: "Evaluate"  },
+      { path: "/teamleader/TmApprove", title: "Approve" },
+    ],
   };
 
   const commonLinks = [

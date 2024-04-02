@@ -29,6 +29,12 @@ const user = [
     password: "123",
     role: "student",
   },
+  {
+    email: "tm@gmail.com",
+    password: "123",
+    role: "team-leader",
+  },
+  
 ];
 
 export default user;
