@@ -4,17 +4,51 @@ import { useEffect, useState } from "react";
 import Button from "../../ui/Button";
 import styled from "styled-components";
 import { useAllUser } from "./UseAllUser";
-import Pagination from "../../ui/Pagination";
+import { useDeleteUser } from "./useDeleteUser";
+import Row from "../../ui/Row";
+const DeleteDialog = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ccc;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+`;
+
 const UserTable = () => {
   const { users, isLoading, error } = useAllUser();
-  const handleDelete = () => {};
-
+  const { deleteUser } = useDeleteUser();
   const handleUpdate = () => {};
+  const [deleteId, setDeleteId] = useState(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const ButtonContainer = styled.div`
     display: flex;
     gap: 10px;
     height: 8rem;
   `;
+
+  const handleConfirmDelete = () => {
+    if (deleteId) {
+      deleteUser(deleteId);
+      setShowDeleteDialog(false);
+      setDeleteId(null);
+    }
+  };
+
+  const handleDeleteBtnClick = (id) => {
+    setDeleteId(id);
+    setShowDeleteDialog(true);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteDialog(false);
+    setDeleteId(null);
+  };
   const actionColumn = {
     field: "action",
     headerName: "Action",
@@ -26,11 +60,14 @@ const UserTable = () => {
           <Button
             size="small"
             variation="danger"
-            onClick={() => handleDelete(row.id)}
+            onClick={() => handleDeleteBtnClick(row.id)}
           >
             Delete
           </Button>
           <Button
+            style={{
+              marginLeft: "1rem",
+            }}
             size="small"
             variation="primary"
             onClick={() => handleUpdate(row)}
@@ -69,7 +106,31 @@ const UserTable = () => {
     return { id, fname, lname, cemail, role };
   });
 
-  return <Table columns={columns} rows={rows} />;
+  return (
+    <>
+      {showDeleteDialog && (
+        <DeleteDialog>
+          <div className="delete-dialog">
+            <p>Are you sure you want to delete this college?</p>
+            <Row type="horizontal">
+              <Button
+                style={{ margin: "5px" }}
+                size="large"
+                variation="danger"
+                onClick={handleConfirmDelete}
+              >
+                Yes
+              </Button>
+              <Button size="large" onClick={handleCancelDelete}>
+                No
+              </Button>
+            </Row>
+          </div>
+        </DeleteDialog>
+      )}
+      <Table columns={columns} rows={rows} />
+    </>
+  );
 };
 
 export default UserTable;

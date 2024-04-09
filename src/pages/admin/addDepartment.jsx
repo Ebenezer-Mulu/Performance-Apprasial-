@@ -1,164 +1,119 @@
-import React from "react";
-
-import { Formik, Form } from "formik";
-import { TextField } from "@mui/material";
+import React, { useState } from "react";
+import { TextField, MenuItem } from "@mui/material";
 import Button from "../../ui/Button";
 import ButtonGroup from "../../ui/ButtonGroup";
-import Row from "../../ui/Row";
+import Modal from "../../ui/Modal";
 import styled from "styled-components";
 import Heading from "../../ui/Heading";
 import { Link, useNavigate } from "react-router-dom";
+import { useAllCollege } from "../../features/colleges/useCollege";
+import { useAddDepartment } from "../../features/department/useAddDepartment";
 
-const StyledForm = styled(Form)`
+const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 15px;
-  width: 50%;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  margin: auto;
 `;
+const AddDepartment = ({ closeModal, open }) => {
+  const { Colleges, isLoading, error } = useAllCollege();
+  const { addNewDepartment } = useAddDepartment();
+  const navigate = useNavigate();
 
-const AddDepartment = () => {
-  const saveDepartment = async (values) => {
-    const navigate = useNavigate();
-    console.log(values);
+  const [formValues, setFormValues] = useState({
+    Dname: "",
+    Dcode: "",
+    collegeId: "",
+  });
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmitModal = async () => {
     try {
-      console.log(values);
-      const response = await fetch("http://localhost:3000/Departments", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
+      await addNewDepartment({
+        departmentCode: formValues.Dcode,
+        departmentName: formValues.Dname,
+        collegeId: formValues.collegeId,
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("Server response:", data);
-
-      navigate("./Depatments");
+      closeModal();
     } catch (error) {
-      console.error("Error saving department:", error);
+      console.error("Error adding college:", error);
     }
   };
 
   return (
-    <Formik
-      initialValues={{
-        Dname: "",
-        Dcode: "",
-        college: "",
-        date: "",
-      }}
-      validate={(values) => {
-        const errors = {};
-        if (!values.Dname) {
-          errors.Dname = "Required";
-        }
-        if (!values.Dcode) {
-          errors.Dcode = "Required";
-        }
-        if (!values.date) {
-          errors.date = "Required";
-        }
-        if (!values.college) {
-          errors.college = "Required";
-        }
-        return errors;
-      }}
-      onSubmit={(values, { setSubmitting }) => {
-        saveDepartment(values);
-        setSubmitting(false);
-      }}
+    <Modal
+      title="Add new College"
+      open={open}
+      handleClose={closeModal}
+      onSubmit={handleSubmitModal}
+      error={error}
+      isLoading={isLoading}
     >
-      {({
-        values,
-        errors,
-        touched,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-      }) => (
-        <form onSubmit={handleSubmit}>
-          <StyledForm>
-            <Heading>Add New Department</Heading>
-            <TextField
-              name="Dname"
-              type="text"
-              id="Dname"
-              label="Department Name"
-              variant="outlined"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.Dname}
-              fullWidth
-            />
+      <form>
+        <TextField
+          name="Dname"
+          type="text"
+          id="Dname"
+          label="Department Name"
+          variant="outlined"
+          onChange={handleChange}
+          sx={{ marginBottom: "10px" }}
+          inputProps={{ style: { fontSize: "16px" } }}
+          InputLabelProps={{ style: { fontSize: "16px" } }}
+          value={formValues.Dname}
+          fullWidth
+        />
 
-            <TextField
-              name="Dcode"
-              type="text"
-              id="Dcode"
-              label="Department Code"
-              variant="outlined"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.Dcode}
-              fullWidth
-            />
+        <TextField
+          name="Dcode"
+          type="text"
+          id="Dcode"
+          label="Department Code"
+          variant="outlined"
+          onChange={handleChange}
+          sx={{ marginBottom: "10px" }}
+          inputProps={{ style: { fontSize: "16px" } }}
+          InputLabelProps={{ style: { fontSize: "16px" } }}
+          value={formValues.Dcode}
+          fullWidth
+        />
 
-            <TextField
-              name="date"
-              type="date"
-              id="date"
-              variant="outlined"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.date}
-              fullWidth
-            />
-
-            <TextField
-              name="college"
-              type="text"
-              id="college"
-              label="College"
-              variant="outlined"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.college}
-              fullWidth
-            />
-
-            {errors.Dname && touched.Dname && (
-              <p style={{ color: "red" }}>{errors.Dname}</p>
-            )}
-            {errors.Dcode && touched.Dcode && (
-              <p style={{ color: "red" }}>{errors.Dcode}</p>
-            )}
-            {errors.date && touched.date && (
-              <p style={{ color: "red" }}>{errors.date}</p>
-            )}
-            {errors.college && touched.college && (
-              <p style={{ color: "red" }}>{errors.college}</p>
-            )}
-
-            <ButtonGroup>
-              <Button variation="secondary">
-                <Link to="/admin/Department"> Cancel</Link>
-              </Button>
-              <Button type="submit">Save changes</Button>
-            </ButtonGroup>
-          </StyledForm>
-        </form>
-      )}
-    </Formik>
+        <TextField
+          select
+          name="collegeId"
+          label="College"
+          sx={{ marginBottom: "10px" }}
+          inputProps={{ style: { fontSize: "16px" } }}
+          InputLabelProps={{ style: { fontSize: "16px" } }}
+          variant="outlined"
+          fullWidth
+          value={formValues.dean}
+          onChange={handleChange}
+        >
+          {Colleges.map((college) => {
+            return (
+              <MenuItem key={college._id} value={college._id}>
+                {college.collegeName}
+              </MenuItem>
+            );
+          })}
+        </TextField>
+      </form>
+    </Modal>
   );
 };
 
