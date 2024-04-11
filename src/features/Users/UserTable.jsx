@@ -1,28 +1,25 @@
 import Table from "../../ui/Table";
-import axios from "axios";
+
 import { useEffect, useState } from "react";
 import Button from "../../ui/Button";
 import styled from "styled-components";
-import { useAllUser } from "./UseAllUser";
-import { useDeleteUser } from "./useDeleteUser";
+import { useGet } from "../../hooks/useGet";
+
 import Row from "../../ui/Row";
-const DeleteDialog = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #ffffff;
-  border-bottom: 1px solid #ccc;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-`;
+import { useDeleteEntity } from "../../hooks/useCustomeMutation";
+import DeleteConfirmationDialog from "../../ui/Dialog";
 
 const UserTable = () => {
-  const { users, isLoading, error } = useAllUser();
-  const { deleteUser } = useDeleteUser();
+  const { collectionData: users, isLoading, error } = useGet("users");
+  const { deleteEntity: deleteUser } = useDeleteEntity({
+    method: "delete",
+    endpoint: "/users",
+    mutationKey: "[delete--user]",
+    successMessage: " User deleted successfully",
+    errorMessage: "Failed to delete User",
+    invalidateQueries: "users",
+    redirectPath: "/admin/users",
+  });
   const handleUpdate = () => {};
   const [deleteId, setDeleteId] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -109,24 +106,10 @@ const UserTable = () => {
   return (
     <>
       {showDeleteDialog && (
-        <DeleteDialog>
-          <div className="delete-dialog">
-            <p>Are you sure you want to delete this college?</p>
-            <Row type="horizontal">
-              <Button
-                style={{ margin: "5px" }}
-                size="large"
-                variation="danger"
-                onClick={handleConfirmDelete}
-              >
-                Yes
-              </Button>
-              <Button size="large" onClick={handleCancelDelete}>
-                No
-              </Button>
-            </Row>
-          </div>
-        </DeleteDialog>
+        <DeleteConfirmationDialog
+          onCancel={handleCancelDelete}
+          onDelete={handleConfirmDelete}
+        />
       )}
       <Table columns={columns} rows={rows} />
     </>

@@ -55,7 +55,6 @@ const Table = ({ columns, rows }) => {
           disableColumnMenu
           rowHeight={70}
         />
-        <Pagination count={1} />
       </StyledTable>
     </StyledTableContainer>
   );

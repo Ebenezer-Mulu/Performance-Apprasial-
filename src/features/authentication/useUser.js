@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import customFetch from "../../utils/baseUrl";
 export function useUser() {
   const {
     isLoading,
     data: user,
     error,
   } = useQuery({
-    queryKey: ["user"],
+    queryKey: ["current-user"],
     queryFn: getCurrentUser,
   });
   const isAuthenticated = !!user;
@@ -17,7 +18,7 @@ const getCurrentUser = async () => {
   try {
     const token = localStorage.getItem("token");
 
-    const response = await axios.get("http://localhost:5000/api/v1/users/me", {
+    const response = await customFetch("/users/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -2,15 +2,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import customFetch from "../../utils/baseUrl";
 const loginAction = async ({ email, password }) => {
   try {
-    const response = await axios.post(
-      "http://localhost:5000/api/v1/users/login",
-      {
-        email,
-        password,
-      }
-    );
+    const response = await customFetch.post("/users/login", {
+      email,
+      password,
+    });
     if (response.data) {
       localStorage.setItem("token", response.data.token);
       return response.data;
