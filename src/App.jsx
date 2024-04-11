@@ -20,6 +20,11 @@ import AddUser from "./pages/hr/user";
 import Criteria from "./pages/hr/criteria";
 import AddCriteria from "./pages/hr/addCriteria";
 
+import TeamleaderDashboard from "./pages/teamleader/dashboard";
+import TmApprove from "./pages/teamleader/TmApprove";
+import TmEvaluate from "./pages/teamleader/TmEvaluate";
+import Userss from "./pages/teamleader/Userss";
+
 // Import your Head pages here
 import HeadDashboard from "./pages/head/dashboard";
 import AddCourse from "./pages/head/addCourse";
@@ -86,6 +91,12 @@ const App = () => {
                 <Route path="courses" element={<Courses />} />
                 <Route path="evaluate" element={<Evaluate />} />
                 <Route path="approve" element={<Approve />} />
+              </Route>
+              <Route path="teamleader">
+                <Route path="dashboard" element={<TeamleaderDashboard />} />
+                <Route path="users" element={<Userss />} />
+                <Route path="evaluate" element={<TmEvaluate />} />
+                <Route path="approve" element={<TmApprove />} />
               </Route>
             </Route>
             <Route path="login" element={<Login />} />

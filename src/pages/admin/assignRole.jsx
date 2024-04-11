@@ -1,51 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Field, Formik } from "formik";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "../../ui/Button";
 import Table from "../../ui/Table";
-import { useAllUser } from "../../features/Users/UseAllUser";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-
-import toast from "react-hot-toast";
+import { useUpdateEntity } from "../../hooks/useCustomeMutation";
 import { useNavigate } from "react-router-dom";
-const assignRole = async (roleMappings) => {
-  try {
-    const token = localStorage.getItem("token");
-    const response = await axios.patch(
-      "http://localhost:5000/api/v1/users/assign-role",
-      roleMappings,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      }
-    );
-
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to assign role");
-  }
-};
+import { useGet } from "../../hooks/useGet";
+import { Spinner } from "react-bootstrap";
 const AssignRole = () => {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { mutate } = useMutation({
-    mutationFn: assignRole,
-    onSuccess: () => {
-      toast.success("Role assigned and password sent via email successfully");
-      queryClient.invalidateQueries("employee");
-      navigate("/admin/users");
-    },
-    onError: (err) => {
-      console.log("ERROR", err);
-      toast.error("Failed to Assign Role");
-    },
+  const { updateEntity } = useUpdateEntity({
+    method: "patch",
+    endpoint: "/users/assign-role",
+    mutationKey: "[update-role]",
+    successMessage: "Role assigned and password sent via email successfully",
+    errorMessage: "Failed to assign role",
+    invalidateQueries: "users",
+    redirectPath: "/admin/users",
+    type: "many",
   });
   const [selectedRoles, setSelectedRoles] = useState({});
-  const { users, isLoading, error } = useAllUser();
+  const { collectionData: users, isLoading, error } = useGet("users");
+
+  if (isLoading) return <Spinner />;
   const columns = [
     { field: "fname", headerName: "First Name", width: 200 },
     { field: "lname", headerName: "Last Name", width: 200 },
@@ -81,9 +59,6 @@ const AssignRole = () => {
       ),
     },
   ];
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
 
   if (error) {
     return <p>Error: {error.message}</p>;
@@ -92,7 +67,7 @@ const AssignRole = () => {
   const rows = users.filter((user) => user.role === undefined);
 
   const handleClick = async () => {
-    mutate(selectedRoles);
+    updateEntity("", selectedRoles);
   };
 
   return (
