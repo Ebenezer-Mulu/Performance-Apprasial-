@@ -10,7 +10,7 @@ const peer = () => {
   return (
     <>
       <Row type="horizontal">
-        <Heading as="h1"> Users</Heading>
+        <Heading as="h1"> Peers</Heading>
         {/* <Button>
           <Link to="/admin/assignRole">Assign Role</Link>
         </Button> */}
