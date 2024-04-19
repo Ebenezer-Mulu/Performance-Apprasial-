@@ -38,7 +38,11 @@ import ProtectedRoute from "./ui/ProtectedRoute";
 
 import PageNotFound from "./pages/PageNotFound";
 import Login from "./pages/Login";
+
+import Cycle from "./pages/hr/cycle";
+
 import Account from "./pages/Account";
+
 
 import AppLayout from "./ui/AppLayout";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -82,6 +86,7 @@ const App = () => {
                 {/* <Route path="/hr/appraisal" element={<Appraisal />} /> */}
                 <Route path="user" element={<AddUser />} />
                 <Route path="criteria" element={<Criteria />} />
+                <Route path="cycle" element={<Cycle />} />
                 <Route path="addCriteria" element={<AddCriteria />} />
               </Route>
 

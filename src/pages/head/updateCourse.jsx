@@ -62,7 +62,7 @@ const UpdateCourseModal = ({ open, handleClose, courseToUpdate }) => {
       startDate,
       department,
     };
-    console.log(id, data);
+    console.log(instructor);
 
     updateEntity(id, data);
     handleClose();
@@ -77,7 +77,7 @@ const UpdateCourseModal = ({ open, handleClose, courseToUpdate }) => {
 
   return (
     <Modal
-      width="130rem"
+      width="10rem"
       title="Update Course"
       open={open}
       onSubmit={handleSubmit}
