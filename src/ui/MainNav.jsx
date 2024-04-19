@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { HiOutlineHome } from "react-icons/hi";
+import {
+  HiOutlineHome,
+  HiOutlineChevronDown,
+  HiOutlineChevronUp,
+} from "react-icons/hi";
 import {
   FaBuilding,
   FaFolderOpen,
@@ -10,7 +14,6 @@ import {
   FaSearch,
 } from "react-icons/fa";
 import { MdPeople } from "react-icons/md";
-import { HiOutlineLogout } from "react-icons/hi";
 import { useUser } from "../features/authentication/useUser";
 
 const NavList = styled.ul`
@@ -20,17 +23,14 @@ const NavList = styled.ul`
 `;
 
 const StyledNavLink = styled(NavLink)`
-  &:link,
-  &:visited {
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-    color: var(--color-grey-600);
-    font-size: 1.6rem;
-    font-weight: 500;
-    padding: 1.2rem 2.4rem;
-    transition: all 0.3s;
-  }
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  color: var(--color-grey-600);
+  font-size: 1.6rem;
+  font-weight: 500;
+  padding: 1.2rem 2.4rem;
+  transition: all 0.3s;
 
   &:hover,
   &:active,
@@ -56,8 +56,21 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
+const SubmenuContainer = styled.div`
+  padding-left: 2.4rem;
+`;
+
+const SubmenuToggle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  cursor: pointer;
+`;
+
 const MainNav = () => {
   const { user } = useUser();
+  const [isSubmenuOpen, setSubmenuOpen] = useState(false);
+
   const links = {
     admin: [
       { path: "/admin", title: "Home", icon: <HiOutlineHome /> },
@@ -69,12 +82,11 @@ const MainNav = () => {
       },
       { path: "/admin/users", title: "Users", icon: <MdPeople /> },
     ],
-
     teamLeader: [
       { path: "/teamleader/dashboard", title: "Home", icon: <HiOutlineHome /> },
       { path: "/teamleader/Userss", title: "Users", icon: <MdPeople /> },
-      { path: "/teamleader/TmEvaluate", title: "Evaluate" },
-      { path: "/teamleader/TmApprove", title: "Approve" },
+      { path: "/teamleader/TmEvaluate", title: "Evaluate", icon: <FaSearch /> },
+      { path: "/teamleader/TmApprove", title: "Approve", icon: <FaSearch /> },
     ],
     hr: [
       { path: "/hr/dashboard", title: "Home", icon: <HiOutlineHome /> },
@@ -83,40 +95,69 @@ const MainNav = () => {
     ],
     head: [
       { path: "/head/dashboard", title: "Home", icon: <HiOutlineHome /> },
-      { path: "/head/courses", title: "courses", icon: <FaUserPlus /> },
-
-      { path: "/head/evaluate", title: "evaluate", icon: <FaSearch /> },
+      { path: "/head/courses", title: "Courses", icon: <FaUserPlus /> },
       { path: "/head/approve", title: "Approve", icon: <FaSearch /> },
     ],
   };
 
-  const commonLinks = [
-    { path: "/settings", title: "Settings", icon: <FaCog /> },
+  const commonSection = [
+    {
+      title: "Evaluate",
+      submenu: [
+        { path: "/evaluate/add-peer", title: "Add Peer" },
+        { path: "/evaluate/add-instructor", title: "Add Instructor" },
+      ],
+      icon: <FaSearch />,
+    },
   ];
 
-  const roleLinks = links[user.role];
+  // Merge common section with role-specific links for each role
+  const roleLinks = {
+    ...links,
+    admin: [...(links.admin || []), ...commonSection],
+    teamLeader: [...(links.teamLeader || []), ...commonSection],
+    hr: [...(links.hr || []), ...commonSection],
+    head: [...(links.head || []), ...commonSection],
+  };
+
+  const toggleSubmenu = () => {
+    setSubmenuOpen(!isSubmenuOpen);
+  };
 
   return (
     <nav>
       <NavList>
-        {roleLinks.map((link, index) => (
+        {(roleLinks[user.role] || []).map((link, index) => (
           <li key={index}>
-            <StyledNavLink to={link.path} activeClassName="active">
-              {link.icon}
-              {link.title}
-            </StyledNavLink>
-          </li>
-        ))}
-        {commonLinks.map((link, index) => (
-          <li key={index}>
-            <StyledNavLink
-              to={link.path}
-              activeClassName="active"
-              onClick={link.onClick}
-            >
-              {link.icon}
-              {link.title}
-            </StyledNavLink>
+            {link.submenu ? (
+              <>
+                <SubmenuToggle onClick={toggleSubmenu}>
+                  <StyledNavLink to="#" activeClassName="active">
+                    {link.icon}
+                    <div>{link.title}</div>
+                  </StyledNavLink>
+                </SubmenuToggle>
+                {isSubmenuOpen && (
+                  <SubmenuContainer>
+                    {link.submenu.map((sublink, subIndex) => (
+                      <StyledNavLink
+                        key={subIndex}
+                        to={sublink.path}
+                        activeClassName="active"
+                      >
+                        {sublink.icon}
+                        {sublink.title}
+                      </StyledNavLink>
+                    ))}
+                  </SubmenuContainer>
+                )}
+              </>
+            ) : (
+              <StyledNavLink to={link.path} activeClassName="active">
+                {link.icon}
+                {link.title}
+              </StyledNavLink>
+            )}
           </li>
         ))}
       </NavList>

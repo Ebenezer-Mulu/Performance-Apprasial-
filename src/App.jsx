@@ -36,6 +36,7 @@ import ProtectedRoute from "./ui/ProtectedRoute";
 
 import PageNotFound from "./pages/PageNotFound";
 import Login from "./pages/Login";
+import Account from "./pages/Account";
 
 import AppLayout from "./ui/AppLayout";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -83,7 +84,7 @@ const App = () => {
               </Route>
 
               <Route path="settings" />
-              <Route path="account" />
+              <Route path="account" element={<Account />} />
 
               <Route path="head">
                 <Route path="dashboard" element={<HeadDashboard />} />

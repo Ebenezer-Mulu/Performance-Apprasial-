@@ -1,13 +1,12 @@
 import Table from "../../ui/Table";
-
 import { useEffect, useState } from "react";
 import Button from "../../ui/Button";
 import styled from "styled-components";
 import { useGet } from "../../hooks/useGet";
-
 import Row from "../../ui/Row";
 import { useDeleteEntity } from "../../hooks/useCustomeMutation";
 import DeleteConfirmationDialog from "../../ui/Dialog";
+import Modal from "../../ui/Modal"; 
 
 const UserTable = () => {
   const { collectionData: users, isLoading, error } = useGet("users");
@@ -20,14 +19,19 @@ const UserTable = () => {
     invalidateQueries: "users",
     redirectPath: "/admin/users",
   });
-  const handleUpdate = () => {};
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
   const [deleteId, setDeleteId] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
   const ButtonContainer = styled.div`
     display: flex;
     gap: 10px;
     height: 8rem;
   `;
+
+  const handleUpdate = () => {
+    setIsModalOpen(true); 
+  };
 
   const handleConfirmDelete = () => {
     if (deleteId) {
@@ -46,6 +50,7 @@ const UserTable = () => {
     setShowDeleteDialog(false);
     setDeleteId(null);
   };
+
   const actionColumn = {
     field: "action",
     headerName: "Action",
@@ -111,6 +116,9 @@ const UserTable = () => {
           onDelete={handleConfirmDelete}
         />
       )}
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}> {/* Modal component */}
+        <h1>Modal Content</h1>
+      </Modal>
       <Table columns={columns} rows={rows} />
     </>
   );
