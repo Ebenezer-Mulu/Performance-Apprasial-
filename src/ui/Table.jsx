@@ -51,6 +51,7 @@ const Table = ({ columns, rows }) => {
         <DataGrid
           rows={rows}
           columns={columns}
+          
           autoHeight={true}
           disableColumnMenu
           rowHeight={70}
