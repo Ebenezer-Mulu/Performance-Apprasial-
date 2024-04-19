@@ -80,6 +80,7 @@ const MainNav = () => {
       { path: "/hr/dashboard", title: "Home", icon: <HiOutlineHome /> },
       { path: "/hr/user", title: "Add User", icon: <FaUserPlus /> },
       { path: "/hr/criteria", title: "Criterias", icon: <FaSearch /> },
+      { path: "/hr/cycle", title: "Cycle", icon: <FaSearch /> },
     ],
     head: [
       { path: "/head/dashboard", title: "Home", icon: <HiOutlineHome /> },

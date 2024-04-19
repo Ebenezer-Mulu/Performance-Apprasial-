@@ -13,7 +13,6 @@ export const performEntityAction = async (method, endpoint, entityData) => {
       });
       break;
     case "patch":
-      console.log(entityData);
       response = await customFetch.patch(endpoint, entityData, {
         headers: {
           Authorization: `Bearer ${token}`,
