@@ -8,10 +8,10 @@ const TmApprove = () => {
   return (
     <StyledApprove>
       <ButtonGroup>
-        <Button>Approve</Button>
-        <Button variation="danger">Decline</Button>
+        <Button > Approve </Button>
+        <Button variation="danger"> Decline </Button>
       </ButtonGroup>
-    </StyledApprove>
+    </StyledApprove> 
   );
 };
 

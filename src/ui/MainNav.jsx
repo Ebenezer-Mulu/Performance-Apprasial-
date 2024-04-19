@@ -12,6 +12,7 @@ import {
   FaUserPlus,
   FaCog,
   FaSearch,
+  FaChartBar,
 } from "react-icons/fa";
 import { MdPeople } from "react-icons/md";
 import { useUser } from "../features/authentication/useUser";
@@ -83,15 +84,20 @@ const MainNav = () => {
       { path: "/admin/users", title: "Users", icon: <MdPeople /> },
     ],
     teamLeader: [
-      { path: "/teamleader/dashboard", title: "Home", icon: <HiOutlineHome /> },
-      { path: "/teamleader/Userss", title: "Users", icon: <MdPeople /> },
-      { path: "/teamleader/TmEvaluate", title: "Evaluate", icon: <FaSearch /> },
-      { path: "/teamleader/TmApprove", title: "Approve", icon: <FaSearch /> },
+
+      { path: "/admin", title: "Home", icon: <HiOutlineHome /> },
+      { path: "/teamleader/Userss", title: "Add User", icon: <FaUserPlus /> },
+
+      { path: "/teamleader/TmEvaluate", title: "Evaluate", icon: <FaChartBar />},
+      { path: "/teamleader/TmResult", title: "Result", icon: <FaUserPlus /> },
+
+
     ],
     hr: [
       { path: "/hr/dashboard", title: "Home", icon: <HiOutlineHome /> },
       { path: "/hr/user", title: "Add User", icon: <FaUserPlus /> },
       { path: "/hr/criteria", title: "Criterias", icon: <FaSearch /> },
+      { path: "/hr/cycle", title: "Cycle", icon: <FaSearch /> },
     ],
     head: [
       { path: "/head/dashboard", title: "Home", icon: <HiOutlineHome /> },

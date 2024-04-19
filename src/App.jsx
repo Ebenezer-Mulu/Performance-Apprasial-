@@ -10,7 +10,7 @@ import Users from "./pages/admin/Users";
 import AssignRole from "./pages/admin/assignRole";
 import AddCollege from "./pages/admin/addCollege";
 import AddDepartment from "./pages/admin/addDepartment";
-
+import Tmeval from "./pages/teamleader/tmeval"
 import UpdatePasswordForm from "./features/authentication/UpdatePasswordForm";
 import ForgotPassword from "./pages/ForgotPassword";
 
@@ -20,10 +20,12 @@ import AddUser from "./pages/hr/user";
 import Criteria from "./pages/hr/criteria";
 import AddCriteria from "./pages/hr/addCriteria";
 
+// Import your teamleader pages here
 import TeamleaderDashboard from "./pages/teamleader/dashboard";
 import TmApprove from "./pages/teamleader/TmApprove";
 import TmEvaluate from "./pages/teamleader/TmEvaluate";
 import Userss from "./pages/teamleader/Userss";
+import TmResult from "./pages/teamleader/TmResult";
 
 // Import your Head pages here
 import HeadDashboard from "./pages/head/dashboard";
@@ -43,7 +45,11 @@ import Subordinate from "./pages/Evaluate/subOrdinate";
 
 import PageNotFound from "./pages/PageNotFound";
 import Login from "./pages/Login";
+
+import Cycle from "./pages/hr/cycle";
+
 import Account from "./pages/Account";
+
 
 import AppLayout from "./ui/AppLayout";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -88,6 +94,7 @@ const App = () => {
                 {/* <Route path="/hr/appraisal" element={<Appraisal />} /> */}
                 <Route path="user" element={<AddUser />} />
                 <Route path="criteria" element={<Criteria />} />
+                <Route path="cycle" element={<Cycle />} />
                 <Route path="addCriteria" element={<AddCriteria />} />
               </Route>
 
@@ -103,8 +110,11 @@ const App = () => {
               </Route>
               <Route path="teamleader">
                 <Route path="dashboard" element={<TeamleaderDashboard />} />
-                <Route path="users" element={<Userss />} />
-                <Route path="evaluate" element={<TmEvaluate />} />
+                <Route path="userss" element={<Userss />} />
+                <Route path="tmeval" element={<Tmeval />} />
+                     
+                <Route path="TmEvaluate" element={<TmEvaluate />} />
+                <Route path="TmResult" element={<TmResult />} />
                 <Route path="approve" element={<TmApprove />} />
               </Route>
 

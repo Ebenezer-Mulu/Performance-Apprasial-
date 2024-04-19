@@ -17,7 +17,7 @@ const CriteriaTable = () => {
   const [deleteId, setDeleteId] = useState(null);
 
   const { deleteEntity: deleteTemplete } = useDeleteEntity({
-    method: "Delete",
+    method: "delete",
     endpoint: "/templetes",
     mutationKey: "[delete-templetes]",
     successMessage: "Apprisal Templete Deleted successfully",
@@ -66,13 +66,7 @@ const CriteriaTable = () => {
           >
             View
           </Button>
-          <Button
-            size="small"
-            onClick={() => handleUpdateBtnClick(row.id)}
-            variation="primary"
-          >
-            Update
-          </Button>
+
           <Button
             size="small"
             variation="danger"
