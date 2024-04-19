@@ -10,7 +10,7 @@ import {
   FaBuilding,
   FaFolderOpen,
   FaUserPlus,
-  FaCog,
+  FaCog,FaUserFriends,FaUsers,
   FaSearch,
   FaChartBar,
 } from "react-icons/fa";
@@ -85,10 +85,10 @@ const MainNav = () => {
     ],
     teamLeader: [
 
-      { path: "/admin", title: "Home", icon: <HiOutlineHome /> },
+      { path: "/teamleader/dashboard", title: "Home", icon: <HiOutlineHome /> },
       { path: "/teamleader/Userss", title: "Add User", icon: <FaUserPlus /> },
 
-      { path: "/teamleader/TmEvaluate", title: "Evaluate", icon: <FaChartBar />},
+      
       { path: "/teamleader/TmResult", title: "Result", icon: <FaUserPlus /> },
 
 
@@ -108,12 +108,12 @@ const MainNav = () => {
 
   const commonSection = [
     {
-      path: "/evaluate",
+      path: "/evaluate/peer",
       title: "Evaluate",
-      icon: <FaSearch />,
+      icon: <FaChartBar />,
       submenu: [
-        { path: "/evaluate/peer", title: "Peer" },
-        { path: "/evaluate/subordinate", title: "Subordinate" },
+        { path: "/evaluate/peer", title: "Peer", icon: <FaUserFriends /> },
+        { path: "/evaluate/subordinate", title: "Subordinate" , icon: <FaUsers />},
       ],
     },
   ];
