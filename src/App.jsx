@@ -32,6 +32,13 @@ import Courses from "./pages/head/courses";
 import Evaluate from "./pages/head/evaluate";
 import Approve from "./pages/head/approve";
 import ProtectedRoute from "./ui/ProtectedRoute";
+
+//Import Evaluate pages
+
+import Peer from "./pages/Evaluate/peer";
+import Self from "./pages/Evaluate/self";
+import Subordinate from "./pages/Evaluate/subOrdinate";
+
 // Import other pages here
 
 import PageNotFound from "./pages/PageNotFound";
@@ -41,6 +48,7 @@ import Account from "./pages/Account";
 import AppLayout from "./ui/AppLayout";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { DarkModeProvider } from "./context/DarkModeContext";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -98,6 +106,12 @@ const App = () => {
                 <Route path="users" element={<Userss />} />
                 <Route path="evaluate" element={<TmEvaluate />} />
                 <Route path="approve" element={<TmApprove />} />
+              </Route>
+
+              <Route path="evaluate">
+                <Route path="peer" element={<Peer />} />
+                <Route path="self" element={<Self />} />
+                <Route path="subordinate" element={<Subordinate />} />
               </Route>
             </Route>
             <Route path="login" element={<Login />} />

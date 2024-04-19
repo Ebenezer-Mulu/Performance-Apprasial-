@@ -57,7 +57,7 @@ const StyledNavLink = styled(NavLink)`
 `;
 
 const SubmenuContainer = styled.div`
-  padding-left: 2.4rem;
+  padding-left: 3.2rem;
 `;
 
 const SubmenuToggle = styled.div`
@@ -102,19 +102,19 @@ const MainNav = () => {
 
   const commonSection = [
     {
+      path: "/evaluate",
       title: "Evaluate",
-      submenu: [
-        { path: "/evaluate/add-peer", title: "Add Peer" },
-        { path: "/evaluate/add-instructor", title: "Add Instructor" },
-      ],
       icon: <FaSearch />,
+      submenu: [
+        { path: "/evaluate/peer", title: "Peer" },
+        { path: "/evaluate/subordinate", title: "Subordinate" },
+      ],
     },
   ];
 
   // Merge common section with role-specific links for each role
   const roleLinks = {
-    ...links,
-    admin: [...(links.admin || []), ...commonSection],
+    admin: [...(links.admin || [])],
     teamLeader: [...(links.teamLeader || []), ...commonSection],
     hr: [...(links.hr || []), ...commonSection],
     head: [...(links.head || []), ...commonSection],
@@ -132,7 +132,7 @@ const MainNav = () => {
             {link.submenu ? (
               <>
                 <SubmenuToggle onClick={toggleSubmenu}>
-                  <StyledNavLink to="#" activeClassName="active">
+                  <StyledNavLink to={link.path} activeClassName="active">
                     {link.icon}
                     <div>{link.title}</div>
                   </StyledNavLink>
@@ -166,3 +166,4 @@ const MainNav = () => {
 };
 
 export default MainNav;
+

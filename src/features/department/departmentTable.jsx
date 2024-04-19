@@ -8,10 +8,14 @@ import { useGet } from "../../hooks/useGet";
 import { useDeleteEntity } from "../../hooks/useCustomeMutation";
 
 import ButtonContainer from "../../ui/ButtonContainer";
+import UpdateDepartmentModal from "../../pages/admin/updateDepartment";
 
 const DepartmentTable = () => {
   const [deleteId, setDeleteId] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [updatedDepartment, setUpdatedDepartment] = useState({});
+
   const {
     collectionData: departments,
     isLoading,
@@ -58,7 +62,15 @@ const DepartmentTable = () => {
     };
   });
 
-  const handleUpdateBtnClick = () => {};
+  const handleUpdateBtnClick = (row) => {
+    setUpdatedDepartment(row);
+    setIsUpdate(true);
+  };
+
+  const cancelUpdating = () => {
+    setIsUpdate(false);
+  };
+
   const handleDeleteBtnClick = (id) => {
     setDeleteId(id);
     setShowDeleteDialog(true);
@@ -80,7 +92,7 @@ const DepartmentTable = () => {
           </Button>
           <Button
             size="small"
-            onClick={() => handleUpdateBtnClick(row.id)}
+            onClick={() => handleUpdateBtnClick(row)}
             variation="primary"
           >
             Update
@@ -98,6 +110,14 @@ const DepartmentTable = () => {
 
   return (
     <>
+         {isUpdate && (
+        <UpdateDepartmentModal
+        //  id={id}
+          handleClose={cancelUpdating}
+          courseToUpdate={updatedDepartment}
+          open={isUpdate}
+        />
+      )}
       {showDeleteDialog && (
         <DeleteConfirmationDialog
           onCancel={handleCancelDelete}
