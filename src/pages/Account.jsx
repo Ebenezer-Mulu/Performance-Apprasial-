@@ -1,22 +1,196 @@
-import Heading from "../ui/Heading";
+import React, { useState } from "react";
+import { HiUser } from "react-icons/hi2";
+import styled from "styled-components";
+import { MdModeEditOutline } from "react-icons/md";
+import { TextField } from "@mui/material";
 import Row from "../ui/Row";
+import Modal from "../ui/Modal";
+
+
+const StyledUser = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 75rem;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
+const StyledIcon = styled(HiUser)`
+  font-size: 15rem;
+  border-radius: 50%;
+  background-color: var(--color-grey-200);
+  cursor: pointer;
+  margin-bottom: 3rem;
+`;
+
+const EditIcon = styled(MdModeEditOutline)`
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  cursor: pointer;
+`;
+
+const StyledField = styled(TextField)`
+  width: 350px;
+`;
 
 function Account() {
+  const email = localStorage.getItem("email");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editedEmail, setEditedEmail] = useState(email || "");
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleUpload = () => {
+    document.getElementById("fileInput").click();
+  };
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      console.log("Selected file:", file);
+      setSelectedImage(URL.createObjectURL(file)); // Store the URL of the selected image
+    }
+  };
+
+  const handleEditClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSaveChanges = (newValue) => {
+    console.log("New email value:", newValue);
+    setEditedEmail(newValue);
+    handleCloseModal();
+  };
+
   return (
-    <>
-      <Heading as="h1">Update your account</Heading>
-
+    <StyledUser>
+      {selectedImage ? (
+        <img src={selectedImage} alt="Selected" style={{ width: "150px", height: "150px", borderRadius: "50%" }} />
+      ) : (
+        <StyledIcon onClick={handleUpload} />
+      )}
+      <input
+        type="file"
+        id="fileInput"
+        accept="image/*"
+        style={{ display: "none" }}
+        onChange={handleImageUpload}
+      />
       <Row>
-        <Heading as="h3">Update user data</Heading>
-        <p>Update user data form</p>
+        <Row type="horizontal">
+          <StyledField
+            value={email}
+            variant="outlined"
+            label="First Name"
+            InputProps={{
+              endAdornment: <EditIcon onClick={handleEditClick} />,
+            }}
+            InputLabelProps={{ style: { fontSize: 14 } }} // Adjust the font size as needed
+            sx={{
+              "& .MuiInputBase-root": {
+                fontSize: 14,
+              },
+            }}
+          />
+          <StyledField
+            value={email}
+            variant="outlined"
+            label="Last Name"
+            InputProps={{
+              endAdornment: <EditIcon onClick={handleEditClick} />,
+            }}
+            InputLabelProps={{ style: { fontSize: 14 } }} // Adjust the font size as needed
+            sx={{
+              "& .MuiInputBase-root": {
+                fontSize: 14,
+              },
+            }}
+          />
+        </Row>
+        <Row type="horizontal">
+          <StyledField
+            value={email}
+            variant="outlined"
+            label="Personal Email"
+            InputProps={{
+              endAdornment: <EditIcon onClick={handleEditClick} />,
+            }}
+            InputLabelProps={{ style: { fontSize: 14 } }} // Adjust the font size as needed
+            sx={{
+              "& .MuiInputBase-root": {
+                fontSize: 14,
+              },
+            }}
+          />
+          <StyledField
+            value={email}
+            variant="outlined"
+            label="Personal Email"
+            InputProps={{
+              endAdornment: <EditIcon onClick={handleEditClick} />,
+            }}
+            InputLabelProps={{ style: { fontSize: 14 } }} // Adjust the font size as needed
+            sx={{
+              "& .MuiInputBase-root": {
+                fontSize: 14,
+              },
+            }}
+          />
+        </Row>
+
+        <Row type="horizontal">
+          <StyledField
+            value={email}
+            variant="outlined"
+            InputProps={{
+              endAdornment: <EditIcon onClick={handleEditClick} />,
+            }}
+            InputLabelProps={{ style: { fontSize: 14 } }} // Adjust the font size as needed
+            sx={{
+              "& .MuiInputBase-root": {
+                fontSize: 14,
+              },
+            }}
+          />
+          <StyledField
+            value={email}
+            variant="outlined"
+            InputProps={{
+              endAdornment: <EditIcon onClick={handleEditClick} />,
+            }}
+            InputLabelProps={{ style: { fontSize: 14 } }} // Adjust the font size as needed
+            sx={{
+              "& .MuiInputBase-root": {
+                fontSize: 14,
+              },
+            }}
+          />
+        </Row>
+
+      
       </Row>
 
-      <Row>
-        <Heading as="h3">Update password</Heading>
-        <p>Update user password form</p>
-      </Row>
-    </>
+      <Modal
+        open={isModalOpen}
+        handleClose={handleCloseModal}
+        title="Edit"
+        onSubmit={handleSaveChanges}
+        formValues={{ email: editedEmail }}
+        setFormValues={({ email }) => setEditedEmail(email)}
+      >
+        <StyledField
+          name="email"
+          value={editedEmail}
+          variant="outlined"
+          onChange={(e) => setEditedEmail(e.target.value)}
+        />
+      </Modal>
+    </StyledUser>
   );
 }
-
 export default Account;
