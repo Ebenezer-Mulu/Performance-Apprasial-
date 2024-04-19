@@ -1,3 +1,4 @@
+
 import Table from "../../ui/Table";
 
 import { useEffect, useState } from "react";
@@ -9,7 +10,7 @@ import Row from "../../ui/Row";
 import { useDeleteEntity } from "../../hooks/useCustomeMutation";
 import DeleteConfirmationDialog from "../../ui/Dialog";
 
-const UserTable = () => {
+const TmResultTable = () => {
   const { collectionData: users, isLoading, error } = useGet("users");
   const { deleteEntity: deleteUser } = useDeleteEntity({
     method: "delete",
@@ -47,40 +48,34 @@ const UserTable = () => {
     setDeleteId(null);
   };
   const actionColumn = {
-    field: "action",
-    headerName: "Action",
-    width: 250,
-    renderCell: (params) => {
-      const row = params.row;
-      return (
-        <ButtonContainer>
-          <Button
-            size="small"
-            variation="danger"
-            onClick={() => handleDeleteBtnClick(row.id)}
-          >
-            Delete
-          </Button>
-          <Button
-            style={{
-              marginLeft: "1rem",
-            }}
-            size="small"
-            variation="primary"
-            onClick={() => handleUpdate(row)}
-          >
-            Update
-          </Button>
-        </ButtonContainer>
-      );
-    },
-  };
-
+        field: "action",
+        headerName: "Action",
+        width: 250,
+        renderCell: (params) => {
+          const row = params.row;
+          return (
+            <ButtonContainer>
+              
+              <Button
+                style={{
+                  marginLeft: "1rem",
+                }}
+                size="small"
+                variation="primary"
+                //onClick={() => }
+              >
+                Approve
+              </Button>
+            </ButtonContainer>
+          );
+        },
+      };
   const columns = [
     { field: "fname", headerName: "First Name", width: 200 },
     { field: "lname", headerName: "Last Name", width: 200 },
-    { field: "cemail", headerName: "Email", width: 200 },
-    { field: "role", headerName: "Role", type: "text", width: 150 },
+    
+    { field: "Departement", headerName: "Departement", width: 200 },
+    { field: "Result", headerName: "Result", width: 200 },
     actionColumn,
   ];
 
@@ -96,24 +91,19 @@ const UserTable = () => {
       _id: id,
       firstName: fname,
       lastName: lname,
-      email: cemail,
+    
       role,
     } = user;
 
-    return { id, fname, lname, cemail, role };
+    return { id, fname, lname, role };
   });
 
   return (
     <>
-      {showDeleteDialog && (
-        <DeleteConfirmationDialog
-          onCancel={handleCancelDelete}
-          onDelete={handleConfirmDelete}
-        />
-      )}
+      
       <Table columns={columns} rows={rows} />
     </>
   );
 };
 
-export default UserTable;
+export default TmResultTable;

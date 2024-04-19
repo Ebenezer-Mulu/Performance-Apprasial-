@@ -1,39 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { DataGrid } from "@mui/x-data-grid";
 import styled from "styled-components";
 import Table from "../../ui/Table";
-import { useAllCollege } from "./useCollege";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import Button from "../../ui/Button";
-import { toast } from "react-hot-toast";
-import axios from "axios";
-import { useDeleteCollege } from "./useDeleteCollege";
 import { Row } from "react-bootstrap";
-
-const ButtonContainer = styled.div`
-  display: flex;
-  gap: 10px;
-  height: 8rem;
-`;
-
-const DeleteDialog = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #ffffff;
-  border-bottom: 1px solid #ccc;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-`;
+import { useGet } from "../../hooks/useGet";
+import { useDeleteEntity } from "../../hooks/useCustomeMutation";
+import DeleteConfirmationDialog from "../../ui/Dialog";
 
 const CollegeTable = () => {
   const queryClient = useQueryClient();
-  const { Colleges, isLoading, error } = useAllCollege();
-  const { deleteCollege } = useDeleteCollege();
+  const { collectionData: Colleges, isLoading, error } = useGet("colleges");
+  const { deleteEntity: deleteCollege } = useDeleteEntity({
+    method: "delete",
+    endpoint: "/colleges",
+    mutationKey: "[delete-colleges]",
+    successMessage: "college deleted successfully",
+    errorMessage: "Failed to delete College",
+    invalidateQueries: "colleges",
+    redirectPath: "/admin/college",
+  });
   const [deleteId, setDeleteId] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -126,24 +112,10 @@ const CollegeTable = () => {
   return (
     <>
       {showDeleteDialog && (
-        <DeleteDialog>
-          <div className="delete-dialog">
-            <p>Are you sure you want to delete this college?</p>
-            <Row type="horizontal">
-              <Button
-                style={{ margin: "10px" }}
-                size="large"
-                variation="danger"
-                onClick={handleConfirmDelete}
-              >
-                Yes
-              </Button>
-              <Button size="large" onClick={handleCancelDelete}>
-                No
-              </Button>
-            </Row>
-          </div>
-        </DeleteDialog>
+        <DeleteConfirmationDialog
+          onCancel={handleCancelDelete}
+          onDelete={handleConfirmDelete}
+        />
       )}
       <Table columns={columns} rows={rows} />
     </>

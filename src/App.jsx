@@ -10,7 +10,7 @@ import Users from "./pages/admin/Users";
 import AssignRole from "./pages/admin/assignRole";
 import AddCollege from "./pages/admin/addCollege";
 import AddDepartment from "./pages/admin/addDepartment";
-
+import Tmeval from "./pages/teamleader/tmeval"
 import UpdatePasswordForm from "./features/authentication/UpdatePasswordForm";
 import ForgotPassword from "./pages/ForgotPassword";
 
@@ -19,6 +19,13 @@ import HRDashboard from "./pages/hr/dashboard";
 import AddUser from "./pages/hr/user";
 import Criteria from "./pages/hr/criteria";
 import AddCriteria from "./pages/hr/addCriteria";
+
+// Import your teamleader pages here
+import TeamleaderDashboard from "./pages/teamleader/dashboard";
+import TmApprove from "./pages/teamleader/TmApprove";
+import TmEvaluate from "./pages/teamleader/TmEvaluate";
+import Userss from "./pages/teamleader/Userss";
+import TmResult from "./pages/teamleader/TmResult";
 
 // Import your Head pages here
 import HeadDashboard from "./pages/head/dashboard";
@@ -86,6 +93,15 @@ const App = () => {
                 <Route path="courses" element={<Courses />} />
                 <Route path="evaluate" element={<Evaluate />} />
                 <Route path="approve" element={<Approve />} />
+              </Route>
+              <Route path="teamleader">
+                <Route path="dashboard" element={<TeamleaderDashboard />} />
+                <Route path="userss" element={<Userss />} />
+                <Route path="tmeval" element={<Tmeval />} />
+                     
+                <Route path="TmEvaluate" element={<TmEvaluate />} />
+                <Route path="TmResult" element={<TmResult />} />
+                <Route path="approve" element={<TmApprove />} />
               </Route>
             </Route>
             <Route path="login" element={<Login />} />

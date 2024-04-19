@@ -5,12 +5,9 @@ import axios from "axios";
 const resetPasswordAction = async ({ password, token }) => {
   console.log(password, token);
   try {
-    const response = await axios.patch(
-      `http://localhost:5000/api/v1/users/resetPassword/${token}`,
-      {
-        password,
-      }
-    );
+    const response = await customFetch.patch(`users/resetPassword/${token}`, {
+      password,
+    });
     return response.data;
   } catch (error) {
     throw error;

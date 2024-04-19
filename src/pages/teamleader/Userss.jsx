@@ -14,7 +14,7 @@ import { useGet } from "../../hooks/useGet";
 import { Spinner } from "react-bootstrap";
 import { useAddEntity } from "../../hooks/useCustomeMutation";
 
-const User = () => {
+const Userss = () => {
   const { collectionData: departments, error } = useGet("departments");
   const { isLoading, collectionData: colleges } = useGet("colleges");
   const { addEntity } = useAddEntity({
@@ -375,4 +375,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Userss;

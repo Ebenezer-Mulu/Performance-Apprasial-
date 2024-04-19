@@ -1,151 +1,189 @@
-// AddCourse.js
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import { Formik, Form, Field } from "formik";
-import Button from "../../ui/Button";
 import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Row from "../../ui/Row";
 import ButtonGroup from "../../ui/ButtonGroup";
 import { Link, useNavigate } from "react-router-dom";
+import Modal from "../../ui/Modal";
+import Spinner from "../../ui/Spinner";
+import { useGet } from "../../hooks/useGet";
+import { useAddEntity } from "../../hooks/useCustomeMutation";
+import { useUser } from "../../features/authentication/useUser";
+const AddCourseForm = ({ closeModal, open }) => {
+  const [formValues, setFormValues] = useState({});
+  const { addEntity: addNewCourse } = useAddEntity({
+    method: "post",
+    endpoint: "/courses",
+    mutationKey: "[add-courses]",
+    successMessage: "Course added successfully",
+    errorMessage: "Failed to add Course",
+    invalidateQueries: "courses",
+    redirectPath: "/head/courses",
+  });
+  const { user } = useUser();
+  const { collectionData: users, isLoading, error } = useGet("users");
 
-const AddCourseForm = () => {
   const navigate = useNavigate();
+  const handleSubmitModal = () => {
+    const {
+      Cname: name,
+      Ccode: code,
+      batch,
+      instructor,
+      semester,
+      en: endDate,
+      startDate: startDate,
+    } = formValues;
+    const department = user.department._id;
 
-  const saveCourse = async (values) => {
-    try {
-      const response = await fetch("http://localhost:3000/Courses", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("Server response:", data);
-      navigate("/head/Courses");
-    } catch (error) {
-      console.error("Error saving course:", error);
-      // Add user-friendly error handling if needed
-    }
+    addNewCourse({
+      name,
+      code,
+      batch,
+      instructor,
+      semester,
+      endDate,
+      startDate,
+      department,
+    });
+    closeModal();
   };
 
+  if (isLoading) return <h1>Loading....</h1>;
+  const instrctor = users.filter((current) => {
+    return (
+      current.department == user.department._id && current.role === "instructor"
+    );
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+  if (isLoading) return <Spinner />;
   return (
-    <Formik
-      initialValues={{
-        Cname: "",
-        Ccode: "",
-        instructor: "",
-        batch: "",
-        semester: "",
-      }}
-      validate={(values) => {
-        const errors = {};
-        if (!values.Cname) {
-          errors.Cname = "Required";
-        }
-        if (!values.Ccode) {
-          errors.Ccode = "Required";
-        }
-        if (!values.instructor) {
-          errors.instructor = "Required";
-        }
-        if (!values.batch) {
-          errors.batch = "Required";
-        }
-        if (!values.semester) {
-          errors.semester = "Required";
-        }
-        return errors;
-      }}
-      onSubmit={(values, { setSubmitting }) => {
-        saveCourse(values);
-        setSubmitting(false);
-      }}
+    <Modal
+      title="Add new Course"
+      open={open}
+      handleClose={closeModal}
+      onSubmit={handleSubmitModal}
     >
-      <Form>
+      <form>
         <Row>
           <Row type="horizontal">
-            <Field
+            <TextField
               name="Cname"
-              as={TextField}
               label="Course Name"
+              onChange={handleChange}
               variant="outlined"
+              sx={{ marginBottom: "10px" }}
+              inputProps={{ style: { fontSize: "16px" } }}
+              InputLabelProps={{ style: { fontSize: "16px" } }}
               fullWidth
             />
-            <Field
+            <TextField
               name="Ccode"
-              as={TextField}
+              onChange={handleChange}
               label="Course Code"
+              sx={{ marginBottom: "10px" }}
+              inputProps={{ style: { fontSize: "16px" } }}
+              InputLabelProps={{ style: { fontSize: "16px" } }}
               variant="outlined"
               fullWidth
             />
           </Row>
           <Row type="horizontal">
-            <Field
-              name="instructor"
-              as={Select}
-              label="Instructor"
-              variant="outlined"
-              defaultValue=""
-              fullWidth
-              sx={{ width: "50%" }}
-            >
-              <MenuItem value="A">A</MenuItem>
-              <MenuItem value="B">B</MenuItem>
-              <MenuItem value="C">C</MenuItem>
-            </Field>
-            <Field
+            <TextField
               name="batch"
-              as={Select}
               variant="outlined"
+              onChange={handleChange}
+              type="number"
               defaultValue=""
               label="Batch"
+              sx={{ marginBottom: "10px" }}
+              inputProps={{ style: { fontSize: "16px" } }}
+              InputLabelProps={{ style: { fontSize: "16px" } }}
               fullWidth
-              sx={{ width: "50%" }}
-            >
-              <MenuItem value="2011">2011</MenuItem>
-              <MenuItem value="2012">2012</MenuItem>
-              <MenuItem value="2013">2013</MenuItem>
-            </Field>
-          </Row>
-          <Row type="horizontal">
-            <Field
+            ></TextField>
+            <TextField
               name="semester"
-              as={Select}
+              label="semester"
+              type="number"
+              onChange={handleChange}
               variant="outlined"
+              sx={{ marginBottom: "10px" }}
+              inputProps={{ style: { fontSize: "16px" } }}
+              InputLabelProps={{ style: { fontSize: "16px" } }}
               defaultValue=""
               fullWidth
-              sx={{ width: "50%" }}
+            ></TextField>
+          </Row>
+          <Row type="horizontal">
+            <TextField
+              name="startDate"
+              variant="outlined"
+              type="date"
+              onChange={handleChange}
+              defaultValue=""
+              label="Start Date"
+              sx={{ marginBottom: "10px" }}
+              inputProps={{ style: { fontSize: "16px" } }}
+              InputLabelProps={{
+                style: { fontSize: "16px" },
+                shrink: true,
+              }}
+              fullWidth
+            ></TextField>
+            <TextField
+              name="en"
+              label="End Date"
+              onChange={handleChange}
+              type="date"
+              variant="outlined"
+              sx={{ marginBottom: "10px" }}
+              inputProps={{ style: { fontSize: "16px" } }}
+              InputLabelProps={{
+                style: { fontSize: "16px" },
+                shrink: true,
+              }}
+              defaultValue=""
+              fullWidth
+            ></TextField>
+          </Row>
+          <Row type="horizontal">
+            <TextField
+              select
+              name="instructor"
+              label="Instructor"
+              onChange={handleChange}
+              variant="outlined"
+              sx={{ marginBottom: "10px" }}
+              inputProps={{ style: { fontSize: "16px" } }}
+              InputLabelProps={{ style: { fontSize: "16px" } }}
+              defaultValue=""
+              fullWidth
             >
-              <MenuItem value="1">1</MenuItem>
-              <MenuItem value="2">2</MenuItem>
-            </Field>
+              {instrctor.map((instrctor) => {
+                return (
+                  <MenuItem key={instrctor._id} value={instrctor._id}>
+                    {`${instrctor.firstName} ${instrctor.lastName}`}
+                  </MenuItem>
+                );
+              })}
+            </TextField>
           </Row>
         </Row>
-        <ButtonGroup>
-          <Button variant="secondary">
-            <Link to="/head/Courses">Close</Link>
-          </Button>
-          <Button type="submit">Save changes</Button>
-        </ButtonGroup>
-      </Form>
-    </Formik>
+      </form>
+    </Modal>
   );
 };
 
-const AddCourse = () => {
-  return (
-    <Box sx={{ width: "100%", typography: "body1" }}>
-      <AddCourseForm />
-    </Box>
-  );
+const AddCourse = ({ closeModel, open }) => {
+  return <AddCourseForm closeModal={closeModel} open={open} />;
 };
 
 export default AddCourse;

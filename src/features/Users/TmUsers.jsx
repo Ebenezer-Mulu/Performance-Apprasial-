@@ -1,15 +1,15 @@
+import { useState } from "react";
 import Table from "../../ui/Table";
-
-import { useEffect, useState } from "react";
 import Button from "../../ui/Button";
 import styled from "styled-components";
 import { useGet } from "../../hooks/useGet";
-
-import Row from "../../ui/Row";
 import { useDeleteEntity } from "../../hooks/useCustomeMutation";
-import DeleteConfirmationDialog from "../../ui/Dialog";
+import ButtonContainer from "../../ui/ButtonContainer";
+import TmEvaluate from "../../pages/teamleader/TmEvaluate";
 
-const UserTable = () => {
+import { Link } from "react-router-dom";
+
+const TmUsers = () => {
   const { collectionData: users, isLoading, error } = useGet("users");
   const { deleteEntity: deleteUser } = useDeleteEntity({
     method: "delete",
@@ -20,57 +20,34 @@ const UserTable = () => {
     invalidateQueries: "users",
     redirectPath: "/admin/users",
   });
-  const handleUpdate = () => {};
   const [deleteId, setDeleteId] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const ButtonContainer = styled.div`
-    display: flex;
-    gap: 10px;
-    height: 8rem;
-  `;
+  const [showevaluation, setShowevaluation] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
-  const handleConfirmDelete = () => {
-    if (deleteId) {
-      deleteUser(deleteId);
-      setShowDeleteDialog(false);
-      setDeleteId(null);
-    }
+  const handleEvaluateBtnClick = (user) => {
+    setSelectedUser(user);
+    setShowevaluation(true);
   };
 
-  const handleDeleteBtnClick = (id) => {
-    setDeleteId(id);
-    setShowDeleteDialog(true);
-  };
-
-  const handleCancelDelete = () => {
-    setShowDeleteDialog(false);
-    setDeleteId(null);
-  };
   const actionColumn = {
     field: "action",
     headerName: "Action",
-    width: 250,
+    width: 200,
     renderCell: (params) => {
       const row = params.row;
       return (
         <ButtonContainer>
           <Button
-            size="small"
-            variation="danger"
-            onClick={() => handleDeleteBtnClick(row.id)}
-          >
-            Delete
-          </Button>
-          <Button
-            style={{
-              marginLeft: "1rem",
-            }}
+            style={{ marginLeft: "5rem" }}
             size="small"
             variation="primary"
-            onClick={() => handleUpdate(row)}
+         
           >
-            Update
+            <Link to="/teamleader/tmeval">Evaluate</Link>
           </Button>
+          
+          
         </ButtonContainer>
       );
     },
@@ -80,7 +57,6 @@ const UserTable = () => {
     { field: "fname", headerName: "First Name", width: 200 },
     { field: "lname", headerName: "Last Name", width: 200 },
     { field: "cemail", headerName: "Email", width: 200 },
-    { field: "role", headerName: "Role", type: "text", width: 150 },
     actionColumn,
   ];
 
@@ -91,29 +67,17 @@ const UserTable = () => {
   if (error) {
     return <p>Error: {error.message}</p>;
   }
-  const rows = users.map((user) => {
-    const {
-      _id: id,
-      firstName: fname,
-      lastName: lname,
-      email: cemail,
-      role,
-    } = user;
 
-    return { id, fname, lname, cemail, role };
+  const rows = users.map((user) => {
+    const { _id: id, firstName: fname, lastName: lname, email: cemail } = user;
+    return { id, fname, lname, cemail };
   });
 
   return (
     <>
-      {showDeleteDialog && (
-        <DeleteConfirmationDialog
-          onCancel={handleCancelDelete}
-          onDelete={handleConfirmDelete}
-        />
-      )}
       <Table columns={columns} rows={rows} />
     </>
   );
 };
 
-export default UserTable;
+export default TmUsers;

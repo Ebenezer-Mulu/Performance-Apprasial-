@@ -1,48 +1,107 @@
 import Table from "../../ui/Table";
 import { useEffect, useState } from "react";
 import Button from "../../ui/Button";
-
+import { useGet } from "../../hooks/useGet";
+import Spinner from "../../ui/Spinner";
+import styled from "styled-components";
+import DeleteConfirmationDialog from "../../ui/Dialog";
+import { useDeleteEntity } from "../../hooks/useCustomeMutation";
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  height: 8rem;
+`;
 const CriteriaTable = () => {
-  const [rows, setRows] = useState([]);
+  const { collectionData: templets, isLoading } = useGet("templetes");
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
-  const columns = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "appraisalType", headerName: "Appraisal Type", width: 400 },
-    {
-      field: "action",
-      headerName: "Action",
-      width: 200,
-      renderCell: (params) => (
-        <Button
-          variation="secondary"
-          onClick={() => handleButtonClick(params.row.id)}
-        >
-          View
-        </Button>
-      ),
-    },
-  ];
+  const { deleteEntity: deleteTemplete } = useDeleteEntity({
+    method: "Delete",
+    endpoint: "/templetes",
+    mutationKey: "[delete-templetes]",
+    successMessage: "Apprisal Templete Deleted successfully",
+    errorMessage: "Failed to delete Templete",
+    invalidateQueries: "templetes",
+    redirectPath: "",
+  });
+  if (isLoading) return <Spinner />;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:3001/Criteria_Type");
-        const data = await response.json();
-        setRows(data);
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  const rows = templets.map((templete) => {
+    const { _id: id, evaluationType: AppraisalType, language } = templete;
 
-    fetchData();
-  }, []);
+    return { id, AppraisalType, language };
+  });
 
-  const handleButtonClick = (rowId) => {
-    console.log("Button clicked for row with ID:", rowId);
+  const handleConfirmDelete = () => {
+    if (deleteId) {
+      deleteTemplete(deleteId);
+      setShowDeleteDialog(false);
+      setDeleteId(null);
+    }
   };
 
-  return <Table columns={columns} rows={rows} />;
+  const handleCancelDelete = () => {
+    setShowDeleteDialog(false);
+    setDeleteId(null);
+  };
+  const handleUpdateBtnClick = () => {};
+  const handleDeleteBtnClick = (id) => {
+    setDeleteId(id);
+    setShowDeleteDialog(true);
+  };
+  const actionColumn = {
+    field: "action",
+    headerName: "Action",
+    width: 350,
+    renderCell: (params) => {
+      const row = params.row;
+      return (
+        <ButtonContainer>
+          <Button
+            style={{ backgroundColor: "#F7C566" }}
+            size="small"
+            onClick={() => handleUpdateBtnClick(row.id)}
+            variation="secondary"
+          >
+            View
+          </Button>
+          <Button
+            size="small"
+            onClick={() => handleUpdateBtnClick(row.id)}
+            variation="primary"
+          >
+            Update
+          </Button>
+          <Button
+            size="small"
+            variation="danger"
+            onClick={() => handleDeleteBtnClick(row.id)}
+          >
+            Delete
+          </Button>
+        </ButtonContainer>
+      );
+    },
+  };
+  const columns = [
+    { field: "AppraisalType", headerName: "Appraisal Type", width: 400 },
+    { field: "language", headerName: "Language" },
+
+    actionColumn,
+  ];
+
+  return (
+    <>
+      {showDeleteDialog && (
+        <DeleteConfirmationDialog
+          onCancel={handleCancelDelete}
+          onDelete={handleConfirmDelete}
+        />
+      )}
+      <Table columns={columns} rows={rows} />
+    </>
+  );
 };
 
 export default CriteriaTable;

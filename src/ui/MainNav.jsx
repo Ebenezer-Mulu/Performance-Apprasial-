@@ -2,7 +2,14 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { HiOutlineHome } from "react-icons/hi";
-import { FaBuilding, FaFolderOpen, FaPlus, FaSearch } from "react-icons/fa";
+import {
+  FaBuilding,
+  FaFolderOpen,
+  FaUserPlus,
+  FaCog,
+  FaSearch,
+  FaChartBar,
+} from "react-icons/fa";
 import { MdPeople } from "react-icons/md";
 import { HiOutlineLogout } from "react-icons/hi";
 import { useUser } from "../features/authentication/useUser";
@@ -63,20 +70,31 @@ const MainNav = () => {
       },
       { path: "/admin/users", title: "Users", icon: <MdPeople /> },
     ],
+
+    teamLeader: [
+      { path: "/admin", title: "Home", icon: <HiOutlineHome /> },
+      { path: "/teamleader/Userss", title: "Add User", icon: <FaUserPlus /> },
+
+      { path: "/teamleader/TmEvaluate", title: "Evaluate", icon: <FaChartBar />},
+      { path: "/teamleader/TmResult", title: "Result", icon: <FaUserPlus /> },
+
+    ],
     hr: [
       { path: "/hr/dashboard", title: "Home", icon: <HiOutlineHome /> },
-      { path: "/hr/user", title: "Add User", icon: <FaPlus /> },
+      { path: "/hr/user", title: "Add User", icon: <FaUserPlus /> },
       { path: "/hr/criteria", title: "Criterias", icon: <FaSearch /> },
+    ],
+    head: [
+      { path: "/head/dashboard", title: "Home", icon: <HiOutlineHome /> },
+      { path: "/head/courses", title: "courses", icon: <FaUserPlus /> },
+
+      { path: "/head/evaluate", title: "evaluate", icon: <FaSearch /> },
+      { path: "/head/approve", title: "Approve", icon: <FaSearch /> },
     ],
   };
 
   const commonLinks = [
-    { path: "/settings", title: "Settings", icon: <FaPlus /> },
-    {
-      path: "/login",
-      title: "Logout",
-      icon: <HiOutlineLogout />,
-    },
+    { path: "/settings", title: "Settings", icon: <FaCog /> },
   ];
 
   const roleLinks = links[user.role];
