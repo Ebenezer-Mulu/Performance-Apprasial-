@@ -5,6 +5,7 @@ import { MdModeEditOutline } from "react-icons/md";
 import { TextField } from "@mui/material";
 import Row from "../ui/Row";
 import Modal from "../ui/Modal";
+import Button from "../ui/Button";
 
 
 const StyledUser = styled.div`
@@ -49,9 +50,13 @@ function Account() {
     const file = event.target.files[0];
     if (file) {
       console.log("Selected file:", file);
-      setSelectedImage(URL.createObjectURL(file)); // Store the URL of the selected image
+      setSelectedImage(URL.createObjectURL(file)); 
     }
   };
+
+  const handleUpdate = () => {
+  
+  }
 
   const handleEditClick = () => {
     setIsModalOpen(true);
@@ -116,7 +121,7 @@ function Account() {
           <StyledField
             value={email}
             variant="outlined"
-            label="Personal Email"
+            label=" Email"
             InputProps={{
               endAdornment: <EditIcon onClick={handleEditClick} />,
             }}
@@ -130,7 +135,7 @@ function Account() {
           <StyledField
             value={email}
             variant="outlined"
-            label="Personal Email"
+            label="Address"
             InputProps={{
               endAdornment: <EditIcon onClick={handleEditClick} />,
             }}
@@ -146,6 +151,7 @@ function Account() {
         <Row type="horizontal">
           <StyledField
             value={email}
+            label="Phone number"
             variant="outlined"
             InputProps={{
               endAdornment: <EditIcon onClick={handleEditClick} />,
@@ -157,19 +163,7 @@ function Account() {
               },
             }}
           />
-          <StyledField
-            value={email}
-            variant="outlined"
-            InputProps={{
-              endAdornment: <EditIcon onClick={handleEditClick} />,
-            }}
-            InputLabelProps={{ style: { fontSize: 14 } }} // Adjust the font size as needed
-            sx={{
-              "& .MuiInputBase-root": {
-                fontSize: 14,
-              },
-            }}
-          />
+         <Button size="large" onClick={handleUpdate}>Save</Button>
         </Row>
 
       

@@ -7,9 +7,14 @@ import { Row } from "react-bootstrap";
 import { useGet } from "../../hooks/useGet";
 import { useDeleteEntity } from "../../hooks/useCustomeMutation";
 import DeleteConfirmationDialog from "../../ui/Dialog";
+<<<<<<< HEAD
+import ButtonContainer from "../../ui/ButtonContainer"
+import UpdateCollegeModal from "../../pages/admin/updateCollege";
+=======
 
 import ButtonContainer from "../../ui/ButtonContainer";
 
+>>>>>>> f1ea6148c45f4b8fd5ba3eab5d4e15b0a2e5a1bb
 
 const CollegeTable = () => {
   const queryClient = useQueryClient();
@@ -25,6 +30,8 @@ const CollegeTable = () => {
   });
   const [deleteId, setDeleteId] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [updatedCollege, setUpdatedCollege] = useState({});
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -37,6 +44,10 @@ const CollegeTable = () => {
   const handleDeleteBtnClick = (id) => {
     setDeleteId(id);
     setShowDeleteDialog(true);
+  };
+
+  const cancelUpdating = () => {
+    setIsUpdate(false);
   };
 
   const handleConfirmDelete = () => {
@@ -52,7 +63,10 @@ const CollegeTable = () => {
     setDeleteId(null);
   };
 
-  const handleUpdateBtnClick = (id) => {};
+  const handleUpdateBtnClick = (row) => {
+    setUpdatedCollege(row);
+    setIsUpdate(true);
+  };
 
   const rows = Colleges.map((college) => {
     const {
@@ -89,7 +103,7 @@ const CollegeTable = () => {
           </Button>
           <Button
             size="small"
-            onClick={() => handleUpdateBtnClick(row.id)}
+            onClick={() => handleUpdateBtnClick(row)}
             variation="primary"
           >
             Update
@@ -114,6 +128,14 @@ const CollegeTable = () => {
 
   return (
     <>
+        {isUpdate && (
+        <UpdateCollegeModal
+        //  id={id}
+          handleClose={cancelUpdating}
+          courseToUpdate={updatedCollege}
+          open={isUpdate}
+        />
+      )}
       {showDeleteDialog && (
         <DeleteConfirmationDialog
           onCancel={handleCancelDelete}
