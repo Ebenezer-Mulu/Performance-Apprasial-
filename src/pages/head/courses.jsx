@@ -8,11 +8,53 @@ import styled from "styled-components";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import AddCourse from "./addCourse";
+import { useAddEntity } from "../../hooks/useCustomeMutation";
+import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
+import Modal from "../../ui/Modal";
 const StyledCollege = styled.div`
   height: max-content;
 `;
 const Courses = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [file, setFile] = useState(null);
+
+  const { addEntity: importCriteria } = useAddEntity({
+    method: "post",
+    endpoint: "/courses/upload",
+    mutationKey: "[add-templetes]",
+    successMessage: "courses Imported successfully",
+    errorMessage: "Failed to Import courses",
+    invalidateQueries: "courses",
+    redirectPath: "/head/courses",
+  });
+
+  const handleImportModalOpen = () => {
+    setIsImportModalOpen(true);
+  };
+
+  const handleImportModalClose = () => {
+    setIsImportModalOpen(false);
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const handleImportSubmit = () => {
+    if (!file) {
+      return;
+    }
+    const formData = new FormData();
+    formData.append("course", file);
+
+    importCriteria(formData);
+
+    setIsImportModalOpen(false);
+    setFile(null);
+  };
 
   const openAddModal = () => {
     setIsAddModalOpen(true);
@@ -29,12 +71,43 @@ const Courses = () => {
       <StyledCollege>
         <Row type="horizontal">
           <Heading as="h1">All Courses</Heading>
-
-          <Button onClick={openAddModal}>Add Courses</Button>
+          <Button style={{ marginLeft: "49rem" }} onClick={openAddModal}>
+            Add Courses
+          </Button>
+          <Button variation="secondary" onClick={handleImportModalOpen}>
+            <CloudUploadOutlinedIcon style={{ marginRight: "8px" }} />
+            Import
+          </Button>
         </Row>
         <Search placeholder="Search for college" />
         <CourseTable />
       </StyledCollege>
+
+      <Modal
+        title="Import Course"
+        open={isImportModalOpen}
+        handleClose={handleImportModalClose}
+        onSubmit={handleImportSubmit}
+        isLoading={false}
+        error={null}
+      >
+        <div style={{ marginBottom: "1rem" }}>
+          <label
+            htmlFor="fileInput"
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <CloudUploadOutlinedIcon style={{ marginRight: "8px" }} />
+            Choose File
+          </label>
+          <input
+            id="fileInput"
+            type="file"
+            name="course"
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
+        </div>
+      </Modal>
     </>
   );
 };

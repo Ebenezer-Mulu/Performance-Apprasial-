@@ -75,7 +75,7 @@ const TmResultTable = () => {
     { field: "lname", headerName: "Last Name", width: 200 },
     
     { field: "Departement", headerName: "Departement", width: 200 },
-    { field: "Result", headerName: "Result", width: 200 },
+    { field: "Result", headerName: "Total Score", width: 200 },
     actionColumn,
   ];
 

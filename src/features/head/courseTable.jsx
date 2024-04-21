@@ -92,9 +92,10 @@ const CourseTable = () => {
       endDate,
     } = course;
 
-    const instructor =
-      `${course.instructor?.firstName} ${course?.instructor?.lastName}` || "";
-    instId = course.instructor._id;
+    const instructor = course.instructor
+      ? `${course.instructor?.firstName} ${course?.instructor?.lastName}`
+      : " not assigned";
+    instId = course?.instructor?._id;
 
     return {
       id,

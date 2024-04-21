@@ -53,6 +53,7 @@ import Login from "./pages/Login";
 import Register from "./pages/register";
 
 import Cycle from "./pages/hr/cycle";
+import Account from "./pages/Account";
 
 import Account from "./pages/Account";
 

@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import TextField from "@mui/material/TextField";
 import Button from "../../ui/Button";
-import styled from "styled-components";
+import styled from "styled-components"; // Import styled-components
 import Row from "../../ui/Row";
 import { MenuItem } from "@mui/material";
 import { Margin } from "@mui/icons-material";
 import { useAddEntity } from "../../hooks/useCustomeMutation";
-
+import Textarea from "../../ui/Textarea";
 const StyledTable = styled.table`
   width: 100%;
   border-collapse: collapse;
@@ -123,7 +123,11 @@ const AddCriteria = () => {
             select
             variant="outlined"
             fullWidth
-            sx={{ marginBottom: "10px", marginLeft: "10px", width: "80%" }}
+            sx={{
+              marginBottom: "10px",
+              marginLeft: "10px",
+              width: "50%",
+            }}
             inputProps={{ style: { fontSize: "16px" } }}
             InputLabelProps={{ style: { fontSize: "16px" } }}
           >
@@ -164,7 +168,7 @@ const AddCriteria = () => {
                     name={`category-${row.id}`}
                     as={TextField}
                     variant="outlined"
-                    sx={{ marginBottom: "10px" }}
+                    sx={{ marginBottom: "10px", fontSize: "16px" }}
                     inputProps={{ style: { fontSize: "12px" } }}
                     InputLabelProps={{ style: { fontSize: "16px" } }}
                     fullWidth
@@ -174,10 +178,10 @@ const AddCriteria = () => {
                 <StyledTd>
                   <Field
                     name={`criteria-${row.id}`}
-                    sx={{ marginBottom: "10px" }}
+                    as={Textarea}
+                    sx={{ marginBottom: "10px", fontSize: "16px" }}
                     inputProps={{ style: { fontSize: "12px" } }}
                     InputLabelProps={{ style: { fontSize: "16px" } }}
-                    as={TextField}
                     variant="outlined"
                     fullWidth
                   />
@@ -188,7 +192,7 @@ const AddCriteria = () => {
                     name={`weight-${row.id}`}
                     as={TextField}
                     type="number"
-                    sx={{ marginBottom: "10px" }}
+                    sx={{ marginBottom: "10px", fontSize: "16px" }}
                     inputProps={{ style: { fontSize: "12px" } }}
                     InputLabelProps={{ style: { fontSize: "16px" } }}
                     variant="outlined"

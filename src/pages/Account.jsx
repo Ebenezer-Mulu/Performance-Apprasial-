@@ -5,7 +5,10 @@ import { MdModeEditOutline } from "react-icons/md";
 import { TextField } from "@mui/material";
 import Row from "../ui/Row";
 import Modal from "../ui/Modal";
+
+
 import Button from "../ui/Button";
+
 
 
 const StyledUser = styled.div`
@@ -50,6 +53,7 @@ function Account() {
     const file = event.target.files[0];
     if (file) {
       console.log("Selected file:", file);
+
       setSelectedImage(URL.createObjectURL(file)); 
     }
   };
@@ -57,6 +61,7 @@ function Account() {
   const handleUpdate = () => {
   
   }
+
 
   const handleEditClick = () => {
     setIsModalOpen(true);
@@ -75,7 +80,9 @@ function Account() {
   return (
     <StyledUser>
       {selectedImage ? (
+
         <img src={selectedImage} alt="Selected" style={{ width: "150px", height: "150px", borderRadius: "50%" }} />
+
       ) : (
         <StyledIcon onClick={handleUpload} />
       )}
@@ -121,7 +128,9 @@ function Account() {
           <StyledField
             value={email}
             variant="outlined"
+
             label=" Email"
+
             InputProps={{
               endAdornment: <EditIcon onClick={handleEditClick} />,
             }}
@@ -135,7 +144,9 @@ function Account() {
           <StyledField
             value={email}
             variant="outlined"
+
             label="Address"
+
             InputProps={{
               endAdornment: <EditIcon onClick={handleEditClick} />,
             }}
@@ -151,7 +162,9 @@ function Account() {
         <Row type="horizontal">
           <StyledField
             value={email}
+
             label="Phone number"
+
             variant="outlined"
             InputProps={{
               endAdornment: <EditIcon onClick={handleEditClick} />,
@@ -163,10 +176,10 @@ function Account() {
               },
             }}
           />
+
          <Button size="large" onClick={handleUpdate}>Save</Button>
         </Row>
 
-      
       </Row>
 
       <Modal

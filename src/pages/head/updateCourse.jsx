@@ -77,7 +77,6 @@ const UpdateCourseModal = ({ open, handleClose, courseToUpdate }) => {
 
   return (
     <Modal
-      width="10rem"
       title="Update Course"
       open={open}
       onSubmit={handleSubmit}

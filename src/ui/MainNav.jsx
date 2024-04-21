@@ -10,11 +10,17 @@ import {
   FaBuilding,
   FaFolderOpen,
   FaUserPlus,
-  FaCog,
+  FaCog,FaUserFriends,FaUsers,
   FaSearch,
   FaChartBar,
 } from "react-icons/fa";
 import { MdPeople } from "react-icons/md";
+
+import { HiOutlineLogout } from "react-icons/hi";
+import { Assessment } from "@mui/icons-material";
+import { Loop } from "@mui/icons-material";
+
+
 import { useUser } from "../features/authentication/useUser";
 
 const NavList = styled.ul`
@@ -85,10 +91,10 @@ const MainNav = () => {
     ],
     teamLeader: [
 
-      { path: "/admin", title: "Home", icon: <HiOutlineHome /> },
+      { path: "/teamleader/dashboard", title: "Home", icon: <HiOutlineHome /> },
       { path: "/teamleader/Userss", title: "Add User", icon: <FaUserPlus /> },
 
-      { path: "/teamleader/TmEvaluate", title: "Evaluate", icon: <FaChartBar />},
+      
       { path: "/teamleader/TmResult", title: "Result", icon: <FaUserPlus /> },
 
 
@@ -96,8 +102,8 @@ const MainNav = () => {
     hr: [
       { path: "/hr/dashboard", title: "Home", icon: <HiOutlineHome /> },
       { path: "/hr/user", title: "Add User", icon: <FaUserPlus /> },
-      { path: "/hr/criteria", title: "Criterias", icon: <FaSearch /> },
-      { path: "/hr/cycle", title: "Cycle", icon: <FaSearch /> },
+      { path: "/hr/criteria", title: "Criterias", icon: <Assessment /> },
+      { path: "/hr/cycle", title: "Cycle", icon: <Loop /> },
     ],
     head: [
       { path: "/head/dashboard", title: "Home", icon: <HiOutlineHome /> },
@@ -113,12 +119,12 @@ const MainNav = () => {
 
   const commonSection = [
     {
-      path: "/evaluate",
+      path: "/evaluate/peer",
       title: "Evaluate",
-      icon: <FaSearch />,
+      icon: <FaChartBar />,
       submenu: [
-        { path: "/evaluate/peer", title: "Peer" },
-        { path: "/evaluate/subordinate", title: "Subordinate" },
+        { path: "/evaluate/peer", title: "Peer", icon: <FaUserFriends /> },
+        { path: "/evaluate/subordinate", title: "Subordinate" , icon: <FaUsers />},
       ],
     },
   ];
@@ -129,6 +135,8 @@ const MainNav = () => {
     teamLeader: [...(links.teamLeader || []), ...commonSection],
     hr: [...(links.hr || []), ...commonSection],
     head: [...(links.head || []), ...commonSection],
+    student: [...(links.admin || [])],
+
   };
 
   const toggleSubmenu = () => {
