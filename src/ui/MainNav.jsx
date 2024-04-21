@@ -104,6 +104,11 @@ const MainNav = () => {
       { path: "/head/courses", title: "Courses", icon: <FaUserPlus /> },
       { path: "/head/approve", title: "Approve", icon: <FaSearch /> },
     ],
+    student: [
+      { path: "/student/dashboard", title: "Home", icon: <HiOutlineHome /> },
+      { path: "/student/courses", title: "Courses", icon: <FaUserPlus /> },
+      
+    ],
   };
 
   const commonSection = [

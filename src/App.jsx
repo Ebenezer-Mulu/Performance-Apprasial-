@@ -41,10 +41,16 @@ import Peer from "./pages/Evaluate/peer";
 import Self from "./pages/Evaluate/self";
 import Subordinate from "./pages/Evaluate/subOrdinate";
 
+//Import student pages
+
+import StudentDashboard from "./pages/student/Dashboard";
+
+
 // Import other pages here
 
 import PageNotFound from "./pages/PageNotFound";
 import Login from "./pages/Login";
+import Register from "./pages/register";
 
 import Cycle from "./pages/hr/cycle";
 
@@ -123,8 +129,15 @@ const App = () => {
                 <Route path="self" element={<Self />} />
                 <Route path="subordinate" element={<Subordinate />} />
               </Route>
+
+              <Route path="student">
+                <Route path="dashboard" element={<StudentDashboard />} />
+               
+              </Route>
+
             </Route>
             <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
             <Route
               path="reset-Password/:token"
               element={<UpdatePasswordForm />}

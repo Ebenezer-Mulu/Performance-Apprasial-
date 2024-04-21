@@ -13,7 +13,7 @@ const StyledUserAvatar = styled.div`
 const Avatar = styled.img`
   display: block;
   width: 4rem;
-  width: 3.6rem;
+  height: 4rem;
   aspect-ratio: 1;
   object-fit: cover;
   object-position: center;
@@ -23,12 +23,19 @@ const Avatar = styled.img`
 
 function UserAvatar() {
   const { user } = useUser();
-  const { firstName, avatar } = user;
+
+ 
+  if (!user) {
+    return null; 
+  }
+
+  
+  const { firstName = "", avatar = "default-user.jpg" } = user;
 
   return (
     <StyledUserAvatar>
       <Avatar
-        src={avatar || "default-user.jpg"}
+        src={avatar}
         alt={`Avatar of ${firstName}`}
       />
       <span>{firstName}</span>

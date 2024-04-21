@@ -7,14 +7,14 @@ import { Row } from "react-bootstrap";
 import { useGet } from "../../hooks/useGet";
 import { useDeleteEntity } from "../../hooks/useCustomeMutation";
 import DeleteConfirmationDialog from "../../ui/Dialog";
-<<<<<<< HEAD
+
 import ButtonContainer from "../../ui/ButtonContainer"
 import UpdateCollegeModal from "../../pages/admin/updateCollege";
-=======
 
-import ButtonContainer from "../../ui/ButtonContainer";
 
->>>>>>> f1ea6148c45f4b8fd5ba3eab5d4e15b0a2e5a1bb
+
+
+
 
 const CollegeTable = () => {
   const queryClient = useQueryClient();

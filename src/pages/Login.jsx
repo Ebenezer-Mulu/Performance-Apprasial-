@@ -3,6 +3,9 @@ import LoginForm from "../features/authentication/LoginForm";
 import Logo from "../ui/Logo";
 import Heading from "../ui/Heading";
 import { useState } from "react";
+import Button from "../ui/Button";
+import FormRowVertical from "../ui/FormRowVertical";
+import { Link } from "react-router-dom";
 
 const LoginLayout = styled.main`
   min-height: 100vh;
@@ -26,6 +29,16 @@ const ForgotPasswordLink = styled.a`
   margin-left: 13rem;
   cursor: pointer;
 `;
+
+const StudentRegister = styled.div`
+  text-align: center;
+  display: block;
+  color: var(--color-brand);
+  text-decoration: none;
+  margin-top: 2rem;
+  font-size: 1.4rem;
+`;
+
 const RememberMeCheckbox = styled.input.attrs({ type: "checkbox" })`
   margin-top: 1rem;
 `;
@@ -50,6 +63,16 @@ function Login() {
         <ForgotPasswordLink href="/forgot-password">
           Forgot Password?
         </ForgotPasswordLink>
+
+        <StudentRegister>
+          <label htmlFor="register"> Dont have an account as a Student?</label>
+        </StudentRegister>
+        <FormRowVertical>
+          <Link to='/register'>
+            
+            <Button size="large">Register</Button>
+          </Link>
+        </FormRowVertical>
       </StyledLoginSection>
     </LoginLayout>
   );

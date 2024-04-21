@@ -6,6 +6,7 @@ import FormRowVertical from "../../ui/FormRowVertical";
 import { useLogin } from "./useLogin";
 import SpinnerMini from "../../ui/SpinnerMini";
 
+
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,12 +48,15 @@ function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
           disabled={isLoading}
         />
+       
       </FormRowVertical>
       <FormRowVertical>
         <Button size="large" disabled={isLoading}>
           {!isLoading ? "Log in" : <SpinnerMini />}
         </Button>
+    
       </FormRowVertical>
+      
     </Form>
   );
 }
