@@ -15,6 +15,12 @@ import {
   FaChartBar,
 } from "react-icons/fa";
 import { MdPeople } from "react-icons/md";
+
+import { HiOutlineLogout } from "react-icons/hi";
+import { Assessment } from "@mui/icons-material";
+import { Loop } from "@mui/icons-material";
+
+
 import { useUser } from "../features/authentication/useUser";
 
 const NavList = styled.ul`
@@ -96,8 +102,8 @@ const MainNav = () => {
     hr: [
       { path: "/hr/dashboard", title: "Home", icon: <HiOutlineHome /> },
       { path: "/hr/user", title: "Add User", icon: <FaUserPlus /> },
-      { path: "/hr/criteria", title: "Criterias", icon: <FaSearch /> },
-      { path: "/hr/cycle", title: "Cycle", icon: <FaSearch /> },
+      { path: "/hr/criteria", title: "Criterias", icon: <Assessment /> },
+      { path: "/hr/cycle", title: "Cycle", icon: <Loop /> },
     ],
     head: [
       { path: "/head/dashboard", title: "Home", icon: <HiOutlineHome /> },

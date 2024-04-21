@@ -47,6 +47,7 @@ import PageNotFound from "./pages/PageNotFound";
 import Login from "./pages/Login";
 
 import Cycle from "./pages/hr/cycle";
+import Account from "./pages/Account";
 
 import Account from "./pages/Account";
 
