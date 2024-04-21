@@ -10,7 +10,7 @@ import Users from "./pages/admin/Users";
 import AssignRole from "./pages/admin/assignRole";
 import AddCollege from "./pages/admin/addCollege";
 import AddDepartment from "./pages/admin/addDepartment";
-
+import Tmeval from "./pages/teamleader/tmeval"
 import UpdatePasswordForm from "./features/authentication/UpdatePasswordForm";
 import ForgotPassword from "./pages/ForgotPassword";
 
@@ -20,10 +20,12 @@ import AddUser from "./pages/hr/user";
 import Criteria from "./pages/hr/criteria";
 import AddCriteria from "./pages/hr/addCriteria";
 
+// Import your teamleader pages here
 import TeamleaderDashboard from "./pages/teamleader/dashboard";
 import TmApprove from "./pages/teamleader/TmApprove";
 import TmEvaluate from "./pages/teamleader/TmEvaluate";
 import Userss from "./pages/teamleader/Userss";
+import TmResult from "./pages/teamleader/TmResult";
 
 // Import your Head pages here
 import HeadDashboard from "./pages/head/dashboard";
@@ -32,16 +34,28 @@ import Courses from "./pages/head/courses";
 import Evaluate from "./pages/head/evaluate";
 import Approve from "./pages/head/approve";
 import ProtectedRoute from "./ui/ProtectedRoute";
+
+//Import Evaluate pages
+
+import Peer from "./pages/Evaluate/peer";
+import Self from "./pages/Evaluate/self";
+import Subordinate from "./pages/Evaluate/subOrdinate";
+
 // Import other pages here
 
 import PageNotFound from "./pages/PageNotFound";
 import Login from "./pages/Login";
+
 import Cycle from "./pages/hr/cycle";
 import Account from "./pages/Account";
+
+import Account from "./pages/Account";
+
 
 import AppLayout from "./ui/AppLayout";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { DarkModeProvider } from "./context/DarkModeContext";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -97,9 +111,18 @@ const App = () => {
               </Route>
               <Route path="teamleader">
                 <Route path="dashboard" element={<TeamleaderDashboard />} />
-                <Route path="users" element={<Userss />} />
-                <Route path="evaluate" element={<TmEvaluate />} />
+                <Route path="userss" element={<Userss />} />
+                <Route path="tmeval" element={<Tmeval />} />
+                     
+                <Route path="TmEvaluate" element={<TmEvaluate />} />
+                <Route path="TmResult" element={<TmResult />} />
                 <Route path="approve" element={<TmApprove />} />
+              </Route>
+
+              <Route path="evaluate">
+                <Route path="peer" element={<Peer />} />
+                <Route path="self" element={<Self />} />
+                <Route path="subordinate" element={<Subordinate />} />
               </Route>
             </Route>
             <Route path="login" element={<Login />} />

@@ -6,11 +6,11 @@ import UserTable from "../../features/Users/UserTable";
 import TmUsers from "../../features/Users/TmUsers";
 import { Link } from "react-router-dom";
 
-const TmEvaluate = () => {
+const peer = () => {
   return (
     <>
       <Row type="horizontal">
-        <Heading as="h1"> Users</Heading>
+        <Heading as="h1"> Peers</Heading>
         {/* <Button>
           <Link to="/admin/assignRole">Assign Role</Link>
         </Button> */}
@@ -23,4 +23,4 @@ const TmEvaluate = () => {
   );
 };
 
-export default TmEvaluate;
+export default peer;

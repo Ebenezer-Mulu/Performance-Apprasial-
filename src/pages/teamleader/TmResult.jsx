@@ -2,11 +2,11 @@ import Heading from "../../ui/Heading";
 import Row from "../../ui/Row";
 import Search from "../../ui/Search";
 import Button from "../../ui/Button";
-import UserTable from "../../features/Users/UserTable";
-import TmUsers from "../../features/Users/TmUsers";
-import { Link } from "react-router-dom";
 
-const TmEvaluate = () => {
+import { Link } from "react-router-dom";
+import TmResultTable from "../../features/Users/TmResultTable";
+
+const TmResult = () => {
   return (
     <>
       <Row type="horizontal">
@@ -16,11 +16,10 @@ const TmEvaluate = () => {
         </Button> */}
       </Row>
       <Search placeholder="Search for User" />
-     
-
-      <TmUsers />
+      
+      <TmResultTable />
     </>
   );
 };
 
-export default TmEvaluate;
+export default TmResult;
