@@ -11,7 +11,7 @@ const peer = () => {
   return (
     <>
       <Row type="horizontal">
-        <Heading as="h1"> peers</Heading>
+        <Heading as="h1"> Peers</Heading>
       </Row>
       <Search placeholder="Search for User" />
 
