@@ -27,7 +27,7 @@ const CriteriaTable = () => {
   });
   if (isLoading) return <Spinner />;
 
-  const rows = templets.map((templete) => {
+  const rows = templets?.map((templete) => {
     const { _id: id, evaluationType: AppraisalType, language } = templete;
 
     return { id, AppraisalType, language };
