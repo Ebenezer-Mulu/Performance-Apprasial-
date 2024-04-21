@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import Heading from "../../ui/Heading";
 import Row from "../../ui/Row";
 import Search from "../../ui/Search";
@@ -10,13 +11,9 @@ const peer = () => {
   return (
     <>
       <Row type="horizontal">
-        <Heading as="h1"> Peers</Heading>
-        {/* <Button>
-          <Link to="/admin/assignRole">Assign Role</Link>
-        </Button> */}
+        <Heading as="h1"> peers</Heading>
       </Row>
       <Search placeholder="Search for User" />
-     
 
       <TmUsers />
     </>

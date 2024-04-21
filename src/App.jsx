@@ -1,5 +1,4 @@
-import React from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import GlobalStyles from "./styles/GlobalStyles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
@@ -10,7 +9,7 @@ import Users from "./pages/admin/Users";
 import AssignRole from "./pages/admin/assignRole";
 import AddCollege from "./pages/admin/addCollege";
 import AddDepartment from "./pages/admin/addDepartment";
-import Tmeval from "./pages/teamleader/tmeval"
+import Tmeval from "./pages/teamleader/tmeval";
 import UpdatePasswordForm from "./features/authentication/UpdatePasswordForm";
 import ForgotPassword from "./pages/ForgotPassword";
 
@@ -48,9 +47,6 @@ import Login from "./pages/Login";
 
 import Cycle from "./pages/hr/cycle";
 import Account from "./pages/Account";
-
-import Account from "./pages/Account";
-
 
 import AppLayout from "./ui/AppLayout";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -113,7 +109,7 @@ const App = () => {
                 <Route path="dashboard" element={<TeamleaderDashboard />} />
                 <Route path="userss" element={<Userss />} />
                 <Route path="tmeval" element={<Tmeval />} />
-                     
+
                 <Route path="TmEvaluate" element={<TmEvaluate />} />
                 <Route path="TmResult" element={<TmResult />} />
                 <Route path="approve" element={<TmApprove />} />
