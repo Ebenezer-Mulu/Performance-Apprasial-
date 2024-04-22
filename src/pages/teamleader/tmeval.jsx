@@ -1,127 +1,129 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import EvaluateAll from "../../features/Users/EvaluateAll";
+import styled from "styled-components";
+import EvaluateAll from "../../features/Users/EvaluateAll"; // Assuming EvaluateAll is a React component
 import Row from "../../ui/Row";
 
-function RatingScale() {
-  return (
-    <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      <h2 style={{ color: "red", marginBottom: "10px" }}>RATING SCALES</h2>
+const RatingScale = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px; /* Adjust as needed */
 
-      <div style={{ width: "80%", position: "relative", marginBottom: "10px" }}>
-        <div
-          style={{
-            background:
-              "linear-gradient(to right, red, orange, yellow, green, indigo, violet)",
-            width: "100%",
-            height: "20px",
-            borderRadius: "10px",
-            marginBottom: "5px",
-            position: "relative",
-          }}
-        >
-          <span
-            style={{
-              position: "absolute",
-              left: "4%",
-              top: "30%",
-              transform: "translate(-50%, -50%)",
-              fontSize: "1px",
-            }}
-          >
-            Very Bad
-          </span>
-          <span
-            style={{
-              position: "absolute",
-              left: "25%",
-              top: "30%",
-              transform: "translate(-50%, -50%)",
-              fontSize: "14px",
-            }}
-          >
-            Bad
-          </span>
-          <span
-            style={{
-              position: "absolute",
-              left: "50%",
-              top: "30%",
-              transform: "translate(-50%, -50%)",
-              fontSize: "14px",
-              color: "red",
-            }}
-          >
-            Neutral
-          </span>
-          <span
-            style={{
-              position: "absolute",
-              left: "75%",
-              top: "30%",
-              transform: "translate(-50%, -50%)",
-              fontSize: "14px",
-            }}
-          >
-            Good
-          </span>
-          <span
-            style={{
-              position: "absolute",
-              left: "93%",
-              top: "30%",
-              transform: "translate(-50%, -50%)",
-              fontSize: "14px",
-            }}
-          >
-            Very Good
-          </span>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: "12px",
-          }}
-        >
-          <span style={{ width: "20px", textAlign: "center" }}>1</span>
-          <span style={{ width: "20px", textAlign: "center" }}>2</span>
-          <span style={{ width: "20px", textAlign: "center" }}>3</span>
-          <span style={{ width: "20px", textAlign: "center" }}>4</span>
-          <span style={{ width: "20px", textAlign: "center" }}>5</span>
-        </div>
-      </div>
-    </div>
-  );
-}
+  h2 {
+    color: #f0594a; /* Orange-red for a clear distinction */
+    margin-bottom: 10px; /* Adjust as needed */
+  }
+
+  .rating-bar {
+    width: 100%;
+    height: 20px;
+    background: linear-gradient(
+      to right,
+      #f0a30a,
+      #f9d423,
+      #f0f0f0,
+      #92d0c3,
+      #428bca
+    ); /* Gradient with more distinct colors */
+    border-radius: 10px;
+    position: relative;
+  }
+
+  .rating-segment {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: calc(20% - 2px); /* Adjust based on number of segments */
+
+    /* Use consistent naming conventions (e.g., veryGood -> veryGood) */
+    &.veryGood {
+      background-color: #92d0c3; /* Light blue for "Good" */
+      left: 80%;
+    }
+
+    &.good {
+      background-color: #92d0c3; /* Light blue for "Good" */
+      left: 60%;
+    }
+
+    &.neutral {
+      background-color: #f0f0f0; /* Gray for "Neutral" */
+      left: 40%;
+    }
+
+    &.bad {
+      background-color: #f9d423; /* Yellow for "Bad" */
+      left: 20%;
+    }
+
+    &.veryBad {
+      background-color: #f0a30a; /* Orange for "Very Bad" */
+      left: 0%;
+    }
+  }
+
+  .rating-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px; /* Adjust as needed */
+    font-size: 12px;
+  }
+`;
+
+const LanguageSelector = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px; /* Adjust as needed */
+`;
+
+const Select = styled.select`
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+`;
+
+const Label = styled.label`
+  margin-right: 10px;
+`;
 
 const Tmeval = () => {
   const [language, setLanguage] = useState("English");
 
-  const handleLanguageChange = (selectedLanguage) => {
-    setLanguage(selectedLanguage);
+  const handleLanguageChange = (e) => {
+    setLanguage(e.target.value);
   };
 
   return (
     <>
-      <div style={{ marginBottom: "10px" }}>
-        <label htmlFor="languageSelect">Select Language: </label>
-        <select
+      <LanguageSelector>
+        <Label htmlFor="languageSelect">Select Language:</Label>
+        <Select
           id="languageSelect"
-          onChange={(e) => handleLanguageChange(e.target.value)}
           value={language}
+          onChange={handleLanguageChange}
         >
           <option value="English">English</option>
           <option value="Amharic">Amharic</option>
-        </select>
-      </div>
+          {/* Add more options as needed */}
+        </Select>
+      </LanguageSelector>
 
-      {/* Rating Scale */}
-      <RatingScale />
+      <RatingScale>
+        <h2>RATING SCALE</h2>
+        <div className="rating-bar">
+          <div className="rating-segment veryGood">Very Good (5)</div>
+          <div className="rating-segment good">Good (4)</div>
+          <div className="rating-segment neutral">Neutral (3)</div>
+          <div className="rating-segment bad">Bad (2)</div>
+          <div className="rating-segment very-bad">Very Bad(1)</div>
+        </div>
+      </RatingScale>
 
-      {/* EvaluateAll component */}
       <EvaluateAll />
     </>
   );
