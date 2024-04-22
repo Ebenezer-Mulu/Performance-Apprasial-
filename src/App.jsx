@@ -10,7 +10,7 @@ import Users from "./pages/admin/Users";
 import AssignRole from "./pages/admin/assignRole";
 import AddCollege from "./pages/admin/addCollege";
 import AddDepartment from "./pages/admin/addDepartment";
-import Tmeval from "./pages/teamleader/tmeval"
+import Tmeval from "./pages/teamleader/tmeval";
 import UpdatePasswordForm from "./features/authentication/UpdatePasswordForm";
 import ForgotPassword from "./pages/ForgotPassword";
 
@@ -45,7 +45,6 @@ import Subordinate from "./pages/Evaluate/subOrdinate";
 
 import StudentDashboard from "./pages/student/Dashboard";
 
-
 // Import other pages here
 
 import PageNotFound from "./pages/PageNotFound";
@@ -54,9 +53,6 @@ import Register from "./pages/register";
 
 import Cycle from "./pages/hr/cycle";
 import Account from "./pages/Account";
-
-import Account from "./pages/Account";
-
 
 import AppLayout from "./ui/AppLayout";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -119,7 +115,7 @@ const App = () => {
                 <Route path="dashboard" element={<TeamleaderDashboard />} />
                 <Route path="userss" element={<Userss />} />
                 <Route path="tmeval" element={<Tmeval />} />
-                     
+
                 <Route path="TmEvaluate" element={<TmEvaluate />} />
                 <Route path="TmResult" element={<TmResult />} />
                 <Route path="approve" element={<TmApprove />} />
@@ -133,9 +129,7 @@ const App = () => {
 
               <Route path="student">
                 <Route path="dashboard" element={<StudentDashboard />} />
-               
               </Route>
-
             </Route>
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />

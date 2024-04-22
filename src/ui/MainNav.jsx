@@ -10,7 +10,9 @@ import {
   FaBuilding,
   FaFolderOpen,
   FaUserPlus,
-  FaCog,FaUserFriends,FaUsers,
+  FaCog,
+  FaUserFriends,
+  FaUsers,
   FaSearch,
   FaChartBar,
 } from "react-icons/fa";
@@ -19,7 +21,6 @@ import { MdPeople } from "react-icons/md";
 import { HiOutlineLogout } from "react-icons/hi";
 import { Assessment } from "@mui/icons-material";
 import { Loop } from "@mui/icons-material";
-
 
 import { useUser } from "../features/authentication/useUser";
 
@@ -90,14 +91,10 @@ const MainNav = () => {
       { path: "/admin/users", title: "Users", icon: <MdPeople /> },
     ],
     teamLeader: [
-
       { path: "/teamleader/dashboard", title: "Home", icon: <HiOutlineHome /> },
       { path: "/teamleader/Userss", title: "Add User", icon: <FaUserPlus /> },
 
-      
       { path: "/teamleader/TmResult", title: "Result", icon: <FaUserPlus /> },
-
-
     ],
     hr: [
       { path: "/hr/dashboard", title: "Home", icon: <HiOutlineHome /> },
@@ -113,30 +110,40 @@ const MainNav = () => {
     student: [
       { path: "/student/dashboard", title: "Home", icon: <HiOutlineHome /> },
       { path: "/student/courses", title: "Courses", icon: <FaUserPlus /> },
-      
     ],
   };
 
   const commonSection = [
     {
-      path: "/evaluate/peer",
       title: "Evaluate",
       icon: <FaChartBar />,
       submenu: [
         { path: "/evaluate/peer", title: "Peer", icon: <FaUserFriends /> },
-        { path: "/evaluate/subordinate", title: "Subordinate" , icon: <FaUsers />},
+        {
+          path: "/evaluate/subordinate",
+          title: "Subordinate",
+          icon: <FaUsers />,
+        },
+        { path: "/evaluate/self", title: "Self", icon: <FaUserFriends /> },
       ],
     },
   ];
 
-  // Merge common section with role-specific links for each role
   const roleLinks = {
-    admin: [...(links.admin || [])],
+    admin: [
+      ...(links.admin || []),
+      {
+        ...commonSection[0],
+        submenu: commonSection[0].submenu.filter(
+          (sublink) => sublink.title === "Self"
+        ),
+      },
+    ],
     teamLeader: [...(links.teamLeader || []), ...commonSection],
     hr: [...(links.hr || []), ...commonSection],
     head: [...(links.head || []), ...commonSection],
-    student: [...(links.admin || [])],
-
+    student: [...(links.student || [])],
+    dean: [...(links.dean || []), ...commonSection],
   };
 
   const toggleSubmenu = () => {
@@ -185,4 +192,3 @@ const MainNav = () => {
 };
 
 export default MainNav;
-
