@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-no-undef */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Table from "../../ui/Table";
@@ -10,7 +12,6 @@ import DeleteConfirmationDialog from "../../ui/Dialog";
 
 import ButtonContainer from "../../ui/ButtonContainer"
 import UpdateCollegeModal from "../../pages/admin/updateCollege";
-
 
 
 const CollegeTable = () => {
@@ -125,9 +126,9 @@ const CollegeTable = () => {
 
   return (
     <>
-        {isUpdate && (
+      {isUpdate && (
         <UpdateCollegeModal
-        //  id={id}
+          //  id={id}
           handleClose={cancelUpdating}
           courseToUpdate={updatedCollege}
           open={isUpdate}

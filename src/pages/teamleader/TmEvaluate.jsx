@@ -11,13 +11,8 @@ const TmEvaluate = () => {
     <>
       <Row type="horizontal">
         <Heading as="h1"> Users</Heading>
-        {/* <Button>
-          <Link to="/admin/assignRole">Assign Role</Link>
-        </Button> */}
       </Row>
       <Search placeholder="Search for User" />
-     
-
       <TmUsers />
     </>
   );

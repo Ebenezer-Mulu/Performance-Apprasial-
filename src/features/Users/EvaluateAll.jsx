@@ -19,11 +19,11 @@ const EvaluateAll = () => {
     redirectPath: "/admin/users",
   });
 
-  // State to store ratings for each row
+
   const [rowRatings, setRowRatings] = useState({});
 
   const handleRatingChange = (newValue, rowId) => {
-    // Update the ratings state for the specific row
+   
     console.log(`Rating for row ${rowId}: ${newValue}`);
     setRowRatings((prevRowRatings) => ({
       ...prevRowRatings,
@@ -43,8 +43,8 @@ const EvaluateAll = () => {
           name={`rating-${rowId}`}
           value={ratingValue}
           onChange={(event, newValue) => handleRatingChange(newValue, rowId)}
-          size="large" // Increase the size of the stars
-          sx={{ // Dynamic color based on rating value
+          size="large" 
+          sx={{ 
             "& .MuiRating-iconFilled": {
               color: ratingValue <= 2 ? "red" : "green", // Red for 1 and 2, Green for others
             },

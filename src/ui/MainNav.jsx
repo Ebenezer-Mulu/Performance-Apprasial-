@@ -92,7 +92,10 @@ const MainNav = () => {
     ],
     teamLeader: [
       { path: "/teamleader/dashboard", title: "Home", icon: <HiOutlineHome /> },
-      { path: "/teamleader/Userss", title: "Add User", icon: <FaUserPlus /> },
+
+
+
+      { path: "/teamleader/Userss", title: "Add User", icon: <FaUserPlus /> },  
 
       { path: "/teamleader/TmResult", title: "Result", icon: <FaUserPlus /> },
     ],
