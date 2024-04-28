@@ -4,6 +4,9 @@ import Logo from "../ui/Logo";
 import Heading from "../ui/Heading";
 import { useState } from "react";
 
+import FormRowVertical from "../ui/FormRowVertical";
+import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
 const LoginLayout = styled.main`
   min-height: 100vh;
   display: grid;
@@ -25,6 +28,14 @@ const ForgotPasswordLink = styled.a`
   margin-top: 1rem;
   margin-left: 13rem;
   cursor: pointer;
+`;
+const StudentRegister = styled.div`
+  text-align: center;
+  display: block;
+  color: var(--color-brand);
+  text-decoration: none;
+  margin-top: 2rem;
+  font-size: 1.4rem;
 `;
 const RememberMeCheckbox = styled.input.attrs({ type: "checkbox" })`
   margin-top: 1rem;

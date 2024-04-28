@@ -3,13 +3,22 @@ import { TextField, MenuItem } from "@mui/material";
 import Button from "../../ui/Button";
 import ButtonGroup from "../../ui/ButtonGroup";
 import styled from "styled-components";
-import { useAddCollege } from "../../features/colleges/useAddCollege";
-import { useAllUser } from "../../features/Users/UseAllUser";
+import { useAddEntity } from "../../hooks/useCustomeMutation";
 import Modal from "../../ui/Modal";
+import { useGet } from "../../hooks/useGet";
 
 const AddCollege = ({ closeModal, open }) => {
-  const { users, isLoading, error } = useAllUser();
-  const { addCollege } = useAddCollege();
+  const { collectionData: users, isLoading, error } = useGet("users");
+
+  const { addEntity: addCollege } = useAddEntity({
+    method: "post",
+    endpoint: "/colleges",
+    mutationKey: "[add-college]",
+    successMessage: "College added successfully",
+    errorMessage: "Failed to add College",
+    invalidateQueries: "colleges",
+    redirectPath: "/admin/colleges",
+  });
   const [formValues, setFormValues] = useState({
     Cname: "",
     Dnumber: "",
@@ -86,7 +95,7 @@ const AddCollege = ({ closeModal, open }) => {
         />
         <TextField
           name="Dnumber"
-          type="text"
+          type="number"
           id="Dnumber"
           label="Number of Departments"
           variant="outlined"

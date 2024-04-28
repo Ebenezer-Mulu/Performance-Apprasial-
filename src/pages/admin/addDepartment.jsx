@@ -6,8 +6,9 @@ import Modal from "../../ui/Modal";
 import styled from "styled-components";
 import Heading from "../../ui/Heading";
 import { Link, useNavigate } from "react-router-dom";
-import { useAllCollege } from "../../features/colleges/useCollege";
-import { useAddDepartment } from "../../features/department/useAddDepartment";
+
+import { useGet } from "../../hooks/useGet";
+import { useAddEntity } from "../../hooks/useCustomeMutation";
 
 const StyledForm = styled.form`
   display: flex;
@@ -15,8 +16,16 @@ const StyledForm = styled.form`
   gap: 15px;
 `;
 const AddDepartment = ({ closeModal, open }) => {
-  const { Colleges, isLoading, error } = useAllCollege();
-  const { addNewDepartment } = useAddDepartment();
+  const { collectionData: Colleges, isLoading, error } = useGet("colleges");
+  const { addEntity: addNewDepartment } = useAddEntity({
+    method: "post",
+    endpoint: "/departments",
+    mutationKey: "[add-department]",
+    successMessage: "Department added successfully",
+    errorMessage: "Failed to add Department",
+    invalidateQueries: "departments",
+    redirectPath: "/admin/departments",
+  });
   const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({

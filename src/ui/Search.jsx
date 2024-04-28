@@ -4,6 +4,7 @@ import Row from "./Row";
 import PropTypes from "prop-types";
 import { useSearchParams, useLocation } from "react-router-dom";
 import { useDebouncedCallback } from "use-debounce";
+import { useState } from "react";
 
 const StyledSearch = styled.div`
   display: flex;
@@ -35,26 +36,14 @@ const SearchInput = styled.input`
   }
 `;
 
-const Search = ({ placeholder }) => {
-  const searchParams = useSearchParams();
-  const location = useLocation();
-  //  const history = useHistory();
+const Search = ({ placeholder, onSearchChange }) => {
+  const [searchValue, setSearchValue] = useState("");
 
-  const handleSearch = useDebouncedCallback((e) => {
-    // search after finishing typing
-    const currentSearchParams = new URLSearchParams(searchParams);
-    const params = Object.fromEntries(currentSearchParams.entries());
-
-    params.set("page", 1);
-
-    if (e.target.value) {
-      e.target.value.length > 2 && params.set("q", e.target.value);
-    } else {
-      params.delete("q");
-    }
-
-    //  history.replace(`${location.pathname}?${new URLSearchParams(params)}`);
-  }, 300);
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    onSearchChange(value);
+  };
 
   return (
     <StyledSearch>
@@ -64,7 +53,7 @@ const Search = ({ placeholder }) => {
           <SearchInput
             type="text"
             placeholder={placeholder}
-            onChange={handleSearch}
+            onChange={handleChange}
           />
         </SearchInputContainer>
       </Row>

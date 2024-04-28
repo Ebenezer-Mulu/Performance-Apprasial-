@@ -2,33 +2,34 @@ import Table from "../../ui/Table";
 import { useEffect, useState } from "react";
 import Button from "../../ui/Button";
 import styled from "styled-components";
-import { useAllDepartment } from "./useDepartment";
-import { useDeleteDepartment } from "./useDeleteDepartement";
+import DeleteConfirmationDialog from "../../ui/Dialog";
 import Row from "../../ui/Row";
-const ButtonContainer = styled.div`
-  display: flex;
-  gap: 10px;
-  height: 8rem;
-`;
+import { useGet } from "../../hooks/useGet";
+import { useDeleteEntity } from "../../hooks/useCustomeMutation";
 
-const DeleteDialog = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #ffffff;
-  border-bottom: 1px solid #ccc;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-`;
-const DepartmentTable = () => {
+import ButtonContainer from "../../ui/ButtonContainer";
+import UpdateDepartmentModal from "../../pages/admin/updateDepartment";
+
+const DepartmentTable = ({ searchQuery }) => {
   const [deleteId, setDeleteId] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const { departments, isLoading, error } = useAllDepartment();
-  const { deleteDepartment } = useDeleteDepartment();
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [updatedDepartment, setUpdatedDepartment] = useState({});
+
+  const {
+    collectionData: departments,
+    isLoading,
+    error,
+  } = useGet("departments");
+  const { deleteEntity: deleteDepartment } = useDeleteEntity({
+    method: "delete",
+    endpoint: "/departments",
+    mutationKey: "[delete-department]",
+    successMessage: "Department deleted successfully",
+    errorMessage: "Failed to delete Department",
+    invalidateQueries: "departments",
+    redirectPath: "/admin/departments",
+  });
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -50,18 +51,44 @@ const DepartmentTable = () => {
     setDeleteId(null);
   };
 
-  const rows = departments.map((department) => {
-    const { _id: id, departmentCode, collegeId, departmentName } = department;
-    const collegeName = collegeId?.collegeName;
-    return {
-      id,
-      departmentCode,
-      collegeName,
-      departmentName,
-    };
-  });
+  let filteredDepartment;
+  if (searchQuery) {
+    filteredDepartment = departments?.filter((department) => {
+      const { departmentCode, departmentName } = department;
+      const collegeName = department?.collegeId?.collegeName;
 
-  const handleUpdateBtnClick = () => {};
+      if (
+        departmentCode.includes(searchQuery.toLowerCase()) ||
+        collegeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        departmentName.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+        return department;
+    });
+  } else {
+    filteredDepartment = departments;
+  }
+  const rows =
+    filteredDepartment?.map((department, index) => {
+      const { _id: id, departmentCode, collegeId, departmentName } = department;
+      const collegeName = collegeId?.collegeName;
+      return {
+        id,
+        index,
+        departmentCode,
+        collegeName,
+        departmentName,
+      };
+    }) || [];
+
+  const handleUpdateBtnClick = (row) => {
+    setUpdatedDepartment(row);
+    setIsUpdate(true);
+  };
+
+  const cancelUpdating = () => {
+    setIsUpdate(false);
+  };
+
   const handleDeleteBtnClick = (id) => {
     setDeleteId(id);
     setShowDeleteDialog(true);
@@ -83,7 +110,7 @@ const DepartmentTable = () => {
           </Button>
           <Button
             size="small"
-            onClick={() => handleUpdateBtnClick(row.id)}
+            onClick={() => handleUpdateBtnClick(row)}
             variation="primary"
           >
             Update
@@ -93,6 +120,12 @@ const DepartmentTable = () => {
     },
   };
   const columns = [
+    {
+      field: "No",
+      headerName: "No",
+      width: 10,
+      renderCell: (params) => params.row.index + 1,
+    },
     { field: "departmentName", headerName: "Department Name", width: 250 },
     { field: "departmentCode", headerName: "Department code", width: 200 },
     { field: "collegeName", headerName: "College", type: "text", width: 250 },
@@ -101,25 +134,18 @@ const DepartmentTable = () => {
 
   return (
     <>
+      {isUpdate && (
+        <UpdateDepartmentModal
+          handleClose={cancelUpdating}
+          departmentToUpdate={updatedDepartment}
+          open={isUpdate}
+        />
+      )}
       {showDeleteDialog && (
-        <DeleteDialog>
-          <div className="delete-dialog">
-            <p>Are you sure you want to delete this college?</p>
-            <Row type="horizontal">
-              <Button
-                style={{ margin: "0px" }}
-                size="large"
-                variation="danger"
-                onClick={handleConfirmDelete}
-              >
-                Yes
-              </Button>
-              <Button size="large" onClick={handleCancelDelete}>
-                No
-              </Button>
-            </Row>
-          </div>
-        </DeleteDialog>
+        <DeleteConfirmationDialog
+          onCancel={handleCancelDelete}
+          onDelete={handleConfirmDelete}
+        />
       )}
       <Table columns={columns} rows={rows} />
     </>

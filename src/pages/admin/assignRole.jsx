@@ -1,16 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Field, Formik } from "formik";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "../../ui/Button";
 import Table from "../../ui/Table";
-import { useAllUser } from "../../features/Users/UseAllUser";
-
+import { useUpdateEntity } from "../../hooks/useCustomeMutation";
+import { useNavigate } from "react-router-dom";
+import { useGet } from "../../hooks/useGet";
+import { Spinner } from "react-bootstrap";
 const AssignRole = () => {
+  const navigate = useNavigate();
+  const { updateEntity } = useUpdateEntity({
+    method: "patch",
+    endpoint: "/users/assign-role",
+    mutationKey: "[update-role]",
+    successMessage: "Role assigned and password sent via email successfully",
+    errorMessage: "Failed to assign role",
+    invalidateQueries: "users",
+    redirectPath: "/admin/users",
+    type: "many",
+  });
   const [selectedRoles, setSelectedRoles] = useState({});
-  const { users, isLoading, error } = useAllUser();
+  const { collectionData: users, isLoading, error } = useGet("users");
+
+  if (isLoading) return <Spinner />;
   const columns = [
-    { field: "fname_lname", headerName: "Full Name", width: 300 },
+    { field: "fname", headerName: "First Name", width: 200 },
+    { field: "lname", headerName: "Last Name", width: 200 },
     { field: "cemail", headerName: "Email", width: 200 },
     {
       field: "role",
@@ -19,12 +35,12 @@ const AssignRole = () => {
       renderCell: (params) => (
         <Formik initialValues={{ role: "" }} onSubmit={() => {}}>
           <Field
-            name={`role-${params.row.id}`}
+            name={`${params.row.id}`}
             as={Select}
             fullWidth
             onChange={(e) => {
               const updatedRoles = { ...selectedRoles };
-              updatedRoles[`role-${params.row.id}`] = e.target.value;
+              updatedRoles[`${params.row.id}`] = e.target.value;
               setSelectedRoles(updatedRoles);
             }}
           >
@@ -35,7 +51,6 @@ const AssignRole = () => {
             <MenuItem value="teamLeader">Team Leader</MenuItem>
             <MenuItem value="head">Head</MenuItem>
             <MenuItem value="dean">Dean</MenuItem>
-            <MenuItem value="teamLeader">Team Leader</MenuItem>
             <MenuItem value="adminstrative">Adminstrative</MenuItem>
             <MenuItem value="hr">Hr</MenuItem>
             <MenuItem value="assistance">Assistance</MenuItem>
@@ -44,53 +59,15 @@ const AssignRole = () => {
       ),
     },
   ];
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
 
   if (error) {
     return <p>Error: {error.message}</p>;
   }
 
-  const rows = users.filter((user) => {
-    console.log(user.role === undefined);
-    console.log(user.role);
-  });
-
-  console.log(rows);
+  const rows = users.filter((user) => user.role === undefined);
 
   const handleClick = async () => {
-    console.log("Selected Roles:", selectedRoles);
-
-    // Assuming selectedRoles is an object with userId as keys and role as values
-    for (const userId in selectedRoles) {
-      const role = selectedRoles[userId];
-
-      try {
-        // Extract the actual user ID from the key (role-bff5)
-        const actualUserId = userId.split("-")[1];
-
-        // Make a PATCH request to update the user's role
-        const response = await fetch(
-          `http://localhost:3000/Users/${actualUserId}`,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ role }),
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`Failed to update role for user ${actualUserId}`);
-        }
-
-        console.log(`Role updated successfully for user ${actualUserId}`);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    updateEntity("", selectedRoles);
   };
 
   return (
@@ -101,11 +78,19 @@ const AssignRole = () => {
           id: row._id,
           cemail: row.email,
           role: row.role,
-          fname_lname: `${row.firstName} ${row.lastName}`,
+          fname: row.firstName,
+          lname: row.lastName,
         }))}
       />
 
-      <Button onClick={handleClick}>Save</Button>
+      <Button
+        style={{ width: "20rem", marginLeft: "40rem" }}
+        variation="primary"
+        size="medium"
+        onClick={handleClick}
+      >
+        Save
+      </Button>
     </>
   );
 };
