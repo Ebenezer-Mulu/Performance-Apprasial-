@@ -14,7 +14,6 @@ import AddDepartment from "./pages/admin/addDepartment";
 import UpdatePasswordForm from "./features/authentication/UpdatePasswordForm";
 import ForgotPassword from "./pages/ForgotPassword";
 
-// Import your HR pages here
 import HRDashboard from "./pages/hr/dashboard";
 import AddUser from "./pages/hr/user";
 import Criteria from "./pages/hr/criteria";
@@ -23,7 +22,10 @@ import AddCriteria from "./pages/hr/addCriteria";
 import TeamleaderDashboard from "./pages/teamleader/dashboard";
 import TmApprove from "./pages/teamleader/TmApprove";
 import TmEvaluate from "./pages/teamleader/TmEvaluate";
+import Tmeval from "./pages/teamleader/tmeval";
 import Userss from "./pages/teamleader/Userss";
+
+import Complaint from "./pages/admin/Complaint";
 
 // Import your Head pages here
 import HeadDashboard from "./pages/head/dashboard";
@@ -33,15 +35,24 @@ import Evaluate from "./pages/head/evaluate";
 import Approve from "./pages/head/approve";
 import ProtectedRoute from "./ui/ProtectedRoute";
 // Import other pages here
-
+import StudentDashboard from "./pages/student/Dashboard";
 import PageNotFound from "./pages/PageNotFound";
 import Login from "./pages/Login";
 import Cycle from "./pages/hr/cycle";
 import Account from "./pages/Account";
-
+import Register from "./pages/Register";
+import Peer from "./pages/Evaluate/peer";
+import Self from "./pages/Evaluate/self";
+import Subordinate from "./pages/Evaluate/subordinate";
+import Course from "./pages/student/Course";
+import TmResult from "./pages/teamleader/TmResult";
+import Selfresult from "./pages/Result/selfresult";
+import Subbordinateresult from "./pages/Result/subbordinateresult";
+import DepartmentUser from "./pages/head/departmentUser";
 import AppLayout from "./ui/AppLayout";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { DarkModeProvider } from "./context/DarkModeContext";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -74,11 +85,11 @@ const App = () => {
                 <Route path="assignRole" element={<AssignRole />} />
                 <Route path="addCollege" element={<AddCollege />} />
                 <Route path="addDepartment" element={<AddDepartment />} />
+                <Route path="compalint" element={<Complaint />} />
               </Route>
 
               <Route path="hr">
                 <Route path="dashboard" element={<HRDashboard />} />
-                {/* <Route path="/hr/appraisal" element={<Appraisal />} /> */}
                 <Route path="user" element={<AddUser />} />
                 <Route path="criteria" element={<Criteria />} />
                 <Route path="cycle" element={<Cycle />} />
@@ -90,19 +101,41 @@ const App = () => {
 
               <Route path="head">
                 <Route path="dashboard" element={<HeadDashboard />} />
+                <Route path="user" element={<DepartmentUser />} />
                 <Route path="addCourse" element={<AddCourse />} />
                 <Route path="courses" element={<Courses />} />
                 <Route path="evaluate" element={<Evaluate />} />
                 <Route path="approve" element={<Approve />} />
               </Route>
+              <Route path="student">
+                <Route path="dashboard" element={<StudentDashboard />} />
+                <Route path="course" element={<Course />} />
+              </Route>
               <Route path="teamleader">
                 <Route path="dashboard" element={<TeamleaderDashboard />} />
-                <Route path="users" element={<Userss />} />
-                <Route path="evaluate" element={<TmEvaluate />} />
+                <Route path="userss" element={<Userss />} />
+
+                <Route path="TmEvaluate" element={<TmEvaluate />} />
+                <Route path="TmResult" element={<TmResult />} />
                 <Route path="approve" element={<TmApprove />} />
+              </Route>
+              <Route path="evaluate">
+                <Route path="peer" element={<Peer />} />
+                <Route path="self" element={<Self />} />
+                <Route path="subordinate" element={<Subordinate />} />
+                <Route path="user" element={<Tmeval />} />
+              </Route>
+              <Route path="result">
+                <Route path="self-result" element={<Selfresult />} />
+                <Route
+                  path="subbordinate-result"
+                  element={<Subbordinateresult />}
+                />
               </Route>
             </Route>
             <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+
             <Route
               path="reset-Password/:token"
               element={<UpdatePasswordForm />}

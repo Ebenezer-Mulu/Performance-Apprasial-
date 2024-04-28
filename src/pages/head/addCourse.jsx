@@ -33,6 +33,7 @@ const AddCourseForm = ({ closeModal, open }) => {
       instructor,
       semester,
       en: endDate,
+      section,
       startDate: startDate,
     } = formValues;
     const department = user.department._id;
@@ -46,6 +47,7 @@ const AddCourseForm = ({ closeModal, open }) => {
       endDate,
       startDate,
       department,
+      section,
     });
     closeModal();
   };
@@ -53,12 +55,17 @@ const AddCourseForm = ({ closeModal, open }) => {
   if (isLoading) return <h1>Loading....</h1>;
   const instrctor = users.filter((current) => {
     return (
-      current.department == user.department._id && current.role === "instructor"
+      current.department == user.department._id &&
+      (current.role === "instructor" ||
+        current.role === "director" ||
+        current.role === "head" ||
+        current.role === "dean")
     );
   });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+
     setFormValues((prevValues) => ({
       ...prevValues,
       [name]: value,
@@ -155,6 +162,18 @@ const AddCourseForm = ({ closeModal, open }) => {
             ></TextField>
           </Row>
           <Row type="horizontal">
+            <TextField
+              name="section"
+              label="Section"
+              type="number"
+              onChange={handleChange}
+              variant="outlined"
+              sx={{ marginBottom: "10px" }}
+              inputProps={{ style: { fontSize: "16px" } }}
+              InputLabelProps={{ style: { fontSize: "16px" } }}
+              defaultValue=""
+              fullWidth
+            ></TextField>
             <TextField
               select
               name="instructor"

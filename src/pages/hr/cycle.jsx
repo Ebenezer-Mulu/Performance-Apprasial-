@@ -12,13 +12,16 @@ const StyledCollege = styled.div`
 `;
 const Cycle = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-
+  const [searchQuery, setSearchQuery] = useState(null);
   const openAddModal = () => {
     setIsAddModalOpen(true);
   };
 
   const closeAddModal = () => {
     setIsAddModalOpen(false);
+  };
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
   };
   return (
     <>
@@ -31,8 +34,12 @@ const Cycle = () => {
 
           <Button onClick={openAddModal}>Add New Cycle</Button>
         </Row>
-        <Search placeholder="Search for college" />
-        <AppraisalCycleTable />
+        <Search
+          onSearchChange={handleSearchChange}
+          value={searchQuery}
+          placeholder="Search for Cycle"
+        />
+        <AppraisalCycleTable searchQuery={searchQuery} />
       </StyledCollege>
     </>
   );

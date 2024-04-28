@@ -1,6 +1,5 @@
 import { createGlobalStyle } from "styled-components";
 
-
 const GlobalStyles = createGlobalStyle`
 
 :root {
@@ -184,6 +183,6 @@ img {
 --image-grayscale: 10%;
 --image-opacity: 90%;
 
-`
+`;
 
 export default GlobalStyles;

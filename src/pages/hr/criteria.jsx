@@ -134,6 +134,9 @@ const Criteria = () => {
           <MenuItem value="peer-administrative-to-administrative">
             Peer-Administrative-To-Administrative
           </MenuItem>
+          <MenuItem value="peer-instructor-to-instructor">
+            Peer-Instructor-To-Instructor
+          </MenuItem>
         </TextField>
 
         <TextField

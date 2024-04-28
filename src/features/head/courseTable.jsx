@@ -9,7 +9,7 @@ import Spinner from "../../ui/Spinner";
 import { useDeleteEntity } from "../../hooks/useCustomeMutation";
 import UpdateCourseModal from "../../pages/head/updateCourse";
 
-const CourseTable = () => {
+const CourseTable = ({ searchQuery }) => {
   const [deleteId, setDeleteId] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
@@ -79,49 +79,81 @@ const CourseTable = () => {
     },
   };
 
-  let instId;
   if (isLoading) return <Spinner />;
-  const rows = Courses.map((course) => {
-    const {
-      _id: id,
-      name: Cname,
-      code: Ccode,
-      isActive,
-      semester,
-      batch,
-      endDate,
-    } = course;
+  let filteredCourses;
+  if (searchQuery) {
+    filteredCourses = Courses?.filter((course) => {
+      const fullName =
+        `${course?.instructor?.firstName} ${course?.instructor?.lastName}`?.toLowerCase();
+      const { code, name } = course;
+      const isActive = `${course.isActive}`;
+      const semester = `${course.semester}`;
+      const batch = `${course.batch}`;
 
-    const instructor = course.instructor
-      ? `${course.instructor?.firstName} ${course?.instructor?.lastName}`
-      : " not assigned";
-    instId = course?.instructor?._id;
+      if (
+        code.includes(searchQuery.toLowerCase()) ||
+        fullName.includes(searchQuery.toLowerCase()) ||
+        name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        isActive.includes(searchQuery) ||
+        batch.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        semester.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+        return course;
+    });
+  } else {
+    filteredCourses = Courses;
+  }
+  const rows =
+    filteredCourses?.map((course, index) => {
+      const {
+        _id: id,
+        name: Cname,
+        code: Ccode,
+        isActive,
+        semester,
+        batch,
+        endDate,
+      } = course;
 
-    return {
-      id,
-      Cname,
-      semester,
-      Ccode,
-      instructor,
-      isActive,
-      batch,
-    };
-  });
+      const instructor = course.instructor
+        ? `${course.instructor?.firstName} ${course?.instructor?.lastName}`
+        : " not assigned";
+      const instId = course?.instructor?._id;
+      const section = course?.section;
+
+      return {
+        id,
+        Cname,
+        semester,
+        Ccode,
+        section,
+        instructor,
+        isActive,
+        instId,
+        index,
+        batch,
+      };
+    }) || [];
 
   const columns = [
-    { field: "Cname", headerName: "Course Name", width: 250 },
+    {
+      field: "No",
+      headerName: "No",
+      width: 10,
+      renderCell: (params) => params.row.index + 1,
+    },
+    { field: "Cname", headerName: "Course Name", width: 230 },
     { field: "Ccode", headerName: "Code", width: 100 },
+    { field: "batch", headerName: "Batch", type: "text", width: 100 },
+    { field: "section", headerName: "Section", type: "number", width: 100 },
+
     {
       field: "instructor",
       headerName: "Instructor",
       type: "text",
       width: 120,
     },
-
-    { field: "batch", headerName: "Batch", type: "text", width: 100 },
-    { field: "semester", headerName: "Semester", type: "text", width: 100 },
-    { field: "isActive", headerName: "Active", type: "text", width: 100 },
-
+    { field: "isActive", headerName: "Active", type: "text", width: 80 },
     actionColumn,
   ];
 
@@ -129,7 +161,6 @@ const CourseTable = () => {
     <>
       {isUpdate && (
         <UpdateCourseModal
-          instId={instId}
           handleClose={cancelUpdating}
           courseToUpdate={updatedCourse}
           open={isUpdate}

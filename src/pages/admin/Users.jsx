@@ -4,8 +4,14 @@ import Search from "../../ui/Search";
 import Button from "../../ui/Button";
 import UserTable from "../../features/Users/UserTable";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const Users = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+  };
   return (
     <>
       <Row type="horizontal">
@@ -14,8 +20,12 @@ const Users = () => {
           <Link to="/admin/assignRole">Assign Role</Link>
         </Button>
       </Row>
-      <Search placeholder="Search for User" />
-      <UserTable />
+      <Search
+        onSearchChange={handleSearchChange}
+        value={searchQuery}
+        placeholder="Search for User"
+      />
+      <UserTable searchQuery={searchQuery} />
     </>
   );
 };

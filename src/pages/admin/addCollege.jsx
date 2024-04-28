@@ -95,7 +95,7 @@ const AddCollege = ({ closeModal, open }) => {
         />
         <TextField
           name="Dnumber"
-          type="text"
+          type="number"
           id="Dnumber"
           label="Number of Departments"
           variant="outlined"

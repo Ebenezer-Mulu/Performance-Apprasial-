@@ -8,7 +8,7 @@ import Spinner from "../../ui/Spinner";
 import { useGet } from "../../hooks/useGet";
 import { useDeleteEntity } from "../../hooks/useCustomeMutation";
 
-const AppraisalCycleTable = () => {
+const AppraisalCycleTable = ({ searchQuery }) => {
   const [deleteId, setDeleteId] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
@@ -93,11 +93,28 @@ const AppraisalCycleTable = () => {
 
   let instId;
   if (isLoading) return <Spinner />;
-  const rows = AppraisalCycles.map((cycle) => {
+
+  let filteredCycle;
+  if (searchQuery) {
+    filteredCycle = AppraisalCycles?.filter((cycle) => {
+      const { description } = cycle;
+      const currentCycleStatus = `${cycle.status}`;
+
+      if (
+        currentCycleStatus.includes(searchQuery.toLowerCase()) ||
+        description.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+        return cycle;
+    });
+  } else {
+    filteredCycle = AppraisalCycles;
+  }
+  const rows = filteredCycle.map((cycle, index) => {
     const { _id: id, status, description, startDate, endDate } = cycle;
 
     return {
       id,
+      index,
       status,
       description,
       startDate: formatDate(startDate),
@@ -106,6 +123,12 @@ const AppraisalCycleTable = () => {
   });
 
   const columns = [
+    {
+      field: "No",
+      headerName: "No",
+      width: 10,
+      renderCell: (params) => params.row.index + 1,
+    },
     { field: "status", headerName: "Status", width: 120 },
     { field: "description", headerName: "Description", width: 250 },
     { field: "startDate", headerName: "Start Date", width: 150 },

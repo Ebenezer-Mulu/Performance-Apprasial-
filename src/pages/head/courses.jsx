@@ -18,6 +18,10 @@ const Courses = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [file, setFile] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+  };
 
   const { addEntity: importCriteria } = useAddEntity({
     method: "post",
@@ -79,8 +83,12 @@ const Courses = () => {
             Import
           </Button>
         </Row>
-        <Search placeholder="Search for college" />
-        <CourseTable />
+        <Search
+          onSearchChange={handleSearchChange}
+          value={searchQuery}
+          placeholder="Search for Course"
+        />
+        <CourseTable searchQuery={searchQuery} />
       </StyledCollege>
 
       <Modal

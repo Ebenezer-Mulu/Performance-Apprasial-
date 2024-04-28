@@ -10,23 +10,27 @@ function Dashboard() {
 
   if (isLoading) return <h1>Loading....</h1>;
   return (
-    <Row type="horizontal">
-      <ActionAreaCard
-        title="College"
-        desc={`Total College-${Colleges?.length || 0}`}
-        icon={<HiOutlineUsers />}
-      />
-      <ActionAreaCard
-        title="Department"
-        desc={`Total Department-${departments?.length || 0}`}
-        icon={<HiOutlineUsers />}
-      />
-      <ActionAreaCard
-        title="User"
-        desc={`Total Users-${users?.length || 0}`}
-        icon={<HiOutlineUsers />}
-      />
-    </Row>
+    <>
+      <Row type="horizontal">
+        <ActionAreaCard
+          title="College"
+          desc={`Total College-${Colleges?.length || 0}`}
+          icon={<HiOutlineUsers />}
+        />
+        <ActionAreaCard
+          title="Department"
+          desc={`Total Department-${departments?.length || 0}`}
+          icon={<HiOutlineUsers />}
+        />
+        <ActionAreaCard
+          title="User"
+          desc={`Total Users-${users?.length || 0}`}
+          icon={<HiOutlineUsers />}
+        />
+      </Row>
+
+      <div></div>
+    </>
   );
 }
 

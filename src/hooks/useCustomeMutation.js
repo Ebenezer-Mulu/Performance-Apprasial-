@@ -83,6 +83,7 @@ export const useUpdateEntity = ({
           updateData.data
         );
       }
+
       return await performEntityAction(
         method,
         `${endpoint}/${updateData.id}`,

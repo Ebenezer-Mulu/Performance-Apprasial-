@@ -11,6 +11,7 @@ import { useGet } from "../../hooks/useGet";
 import Spinner from "../../ui/Spinner";
 const UpdateCourseModal = ({ open, handleClose, courseToUpdate }) => {
   const [formValues, setFormValues] = useState({});
+
   const { user } = useUser();
   const {
     collectionData: users,
@@ -40,11 +41,11 @@ const UpdateCourseModal = ({ open, handleClose, courseToUpdate }) => {
   };
 
   const handleSubmit = (event) => {
+    let instructor;
     const {
       Cname: name,
       Ccode: code,
       batch,
-      instructor,
       semester,
       en: endDate,
       startDate,
@@ -52,6 +53,12 @@ const UpdateCourseModal = ({ open, handleClose, courseToUpdate }) => {
 
     const department = user.department.id;
     const id = courseToUpdate.id;
+
+    if (courseToUpdate.instructor === formValues.instructor) {
+      instructor = courseToUpdate.instId;
+    } else {
+      instructor = formValues.instructor;
+    }
     const data = {
       name,
       code,
@@ -62,7 +69,6 @@ const UpdateCourseModal = ({ open, handleClose, courseToUpdate }) => {
       startDate,
       department,
     };
-    console.log(instructor);
 
     updateEntity(id, data);
     handleClose();
@@ -137,6 +143,21 @@ const UpdateCourseModal = ({ open, handleClose, courseToUpdate }) => {
             sx={{ marginBottom: "10px" }}
             inputProps={{ style: { fontSize: "16px" } }}
             InputLabelProps={{ style: { fontSize: "16px" } }}
+            fullWidth
+            required
+          />
+        </Row>
+        <Row>
+          <TextField
+            name="section"
+            label="Section"
+            type="number"
+            value={formValues.section || ""}
+            onChange={handleChange}
+            sx={{ marginBottom: "10px" }}
+            inputProps={{ style: { fontSize: "16px" } }}
+            InputLabelProps={{ style: { fontSize: "16px" }, shrink: true }}
+            variant="outlined"
             fullWidth
             required
           />

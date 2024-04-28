@@ -7,7 +7,11 @@ import AddDepartment from "./addDepartment";
 import DepartmentTable from "../../features/department/departmentTable";
 const Departments = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false); //
+  const [searchQuery, setSearchQuery] = useState("");
 
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+  };
   const openAddModal = () => {
     setIsAddModalOpen(true);
   };
@@ -22,8 +26,12 @@ const Departments = () => {
         <Heading as="h1">All Departments</Heading>
         <Button onClick={openAddModal}>Add Department</Button>
       </Row>
-      <Search placeholder="Search for college" />
-      <DepartmentTable />
+      <Search
+        onSearchChange={handleSearchChange}
+        value={searchQuery}
+        placeholder="Search for Department"
+      />
+      <DepartmentTable searchQuery={searchQuery} />
       {isAddModalOpen && (
         <AddDepartment open={isAddModalOpen} closeModal={closeAddModal} />
       )}

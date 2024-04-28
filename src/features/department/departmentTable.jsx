@@ -8,10 +8,14 @@ import { useGet } from "../../hooks/useGet";
 import { useDeleteEntity } from "../../hooks/useCustomeMutation";
 
 import ButtonContainer from "../../ui/ButtonContainer";
+import UpdateDepartmentModal from "../../pages/admin/updateDepartment";
 
-const DepartmentTable = () => {
+const DepartmentTable = ({ searchQuery }) => {
   const [deleteId, setDeleteId] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [updatedDepartment, setUpdatedDepartment] = useState({});
+
   const {
     collectionData: departments,
     isLoading,
@@ -47,18 +51,44 @@ const DepartmentTable = () => {
     setDeleteId(null);
   };
 
-  const rows = departments.map((department) => {
-    const { _id: id, departmentCode, collegeId, departmentName } = department;
-    const collegeName = collegeId?.collegeName;
-    return {
-      id,
-      departmentCode,
-      collegeName,
-      departmentName,
-    };
-  });
+  let filteredDepartment;
+  if (searchQuery) {
+    filteredDepartment = departments?.filter((department) => {
+      const { departmentCode, departmentName } = department;
+      const collegeName = department?.collegeId?.collegeName;
 
-  const handleUpdateBtnClick = () => {};
+      if (
+        departmentCode.includes(searchQuery.toLowerCase()) ||
+        collegeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        departmentName.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+        return department;
+    });
+  } else {
+    filteredDepartment = departments;
+  }
+  const rows =
+    filteredDepartment?.map((department, index) => {
+      const { _id: id, departmentCode, collegeId, departmentName } = department;
+      const collegeName = collegeId?.collegeName;
+      return {
+        id,
+        index,
+        departmentCode,
+        collegeName,
+        departmentName,
+      };
+    }) || [];
+
+  const handleUpdateBtnClick = (row) => {
+    setUpdatedDepartment(row);
+    setIsUpdate(true);
+  };
+
+  const cancelUpdating = () => {
+    setIsUpdate(false);
+  };
+
   const handleDeleteBtnClick = (id) => {
     setDeleteId(id);
     setShowDeleteDialog(true);
@@ -80,7 +110,7 @@ const DepartmentTable = () => {
           </Button>
           <Button
             size="small"
-            onClick={() => handleUpdateBtnClick(row.id)}
+            onClick={() => handleUpdateBtnClick(row)}
             variation="primary"
           >
             Update
@@ -90,6 +120,12 @@ const DepartmentTable = () => {
     },
   };
   const columns = [
+    {
+      field: "No",
+      headerName: "No",
+      width: 10,
+      renderCell: (params) => params.row.index + 1,
+    },
     { field: "departmentName", headerName: "Department Name", width: 250 },
     { field: "departmentCode", headerName: "Department code", width: 200 },
     { field: "collegeName", headerName: "College", type: "text", width: 250 },
@@ -98,6 +134,13 @@ const DepartmentTable = () => {
 
   return (
     <>
+      {isUpdate && (
+        <UpdateDepartmentModal
+          handleClose={cancelUpdating}
+          departmentToUpdate={updatedDepartment}
+          open={isUpdate}
+        />
+      )}
       {showDeleteDialog && (
         <DeleteConfirmationDialog
           onCancel={handleCancelDelete}

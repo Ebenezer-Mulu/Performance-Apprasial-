@@ -1,18 +1,28 @@
-import StyledSelect from "../../ui/Select";
-// import Peer from "../../ui/appraisal/peer";
+import Heading from "../../ui/Heading";
 import Row from "../../ui/Row";
+import Search from "../../ui/Search";
+
+import TmUsers from "../../features/Users/TmUsers";
 
 const TmEvaluate = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+  };
   return (
-    <Row>
-      <StyledSelect>
-        <option>A</option>
-        <option>B</option>
-        <option>C</option>
-        <option>D</option>
-      </StyledSelect>
-      <Peer />
-    </Row>
+    <>
+      <Row type="horizontal">
+        <Heading as="h1"> Users</Heading>
+      </Row>
+      <Search
+        onSearchChange={handleSearchChange}
+        value={searchQuery}
+        placeholder="Search for User"
+      />
+
+      <TmUsers searchQuery={searchQuery} />
+    </>
   );
 };
 

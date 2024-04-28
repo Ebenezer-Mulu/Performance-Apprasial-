@@ -7,7 +7,11 @@ import CollegeTable from "../../features/colleges/CollegeTable";
 import AddCollege from "./addCollege";
 const Colleges = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false); //
+  const [searchQuery, setSearchQuery] = useState("");
 
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+  };
   const openAddModal = () => {
     setIsAddModalOpen(true);
   };
@@ -22,8 +26,12 @@ const Colleges = () => {
         <Heading as="h1">All Colleges</Heading>
         <Button onClick={openAddModal}>Add College</Button>{" "}
       </Row>
-      <Search placeholder="Search for college" />
-      <CollegeTable />
+      <Search
+        onSearchChange={handleSearchChange}
+        value={searchQuery}
+        placeholder="Search for Department"
+      />
+      <CollegeTable searchQuery={searchQuery} />
       {isAddModalOpen && (
         <AddCollege open={isAddModalOpen} closeModal={closeAddModal} />
       )}

@@ -2,6 +2,7 @@ import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import styled from "styled-components";
 import Pagination from "./Pagination";
+
 const StyledTableContainer = styled.div`
   width: fit-content;
   height: 100%;
@@ -14,6 +15,10 @@ const StyledTable = styled.div`
 
   .MuiDataGrid-root {
     font-size: 14px;
+  }
+
+  .MuiDataGrid-cell {
+    white-space: pre-wrap; /* Allow line breaks */
   }
 
   .MuiDataGrid-headerCell {
