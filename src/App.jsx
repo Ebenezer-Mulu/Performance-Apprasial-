@@ -38,6 +38,7 @@ import ProtectedRoute from "./ui/ProtectedRoute";
 import StudentDashboard from "./pages/student/Dashboard";
 import PageNotFound from "./pages/PageNotFound";
 import Login from "./pages/Login";
+import UserInfo from "./pages/user/userinfo";
 import Cycle from "./pages/hr/cycle";
 import Account from "./pages/Account";
 import Register from "./pages/Register";
@@ -124,6 +125,10 @@ const App = () => {
                 <Route path="self" element={<Self />} />
                 <Route path="subordinate" element={<Subordinate />} />
                 <Route path="user" element={<Tmeval />} />
+              </Route>
+              <Route path="user">
+                <Route path="userinfo" element={<UserInfo />} />
+        
               </Route>
               <Route path="result">
                 <Route path="self-result" element={<Selfresult />} />

@@ -1,26 +1,17 @@
-import React, { useState } from "react";
-import { TextField, MenuItem, Select } from "@mui/material";
+import React from "react";
 import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
-import styled from "styled-components";
+import Box from "@mui/material/Box";
 import { useAddEntity } from "../../hooks/useCustomeMutation";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import styled from "styled-components";
+import { useState ,useEffect} from "react";
+import * as Yup from "yup";
 
-const StyledForm = styled.form`
+const StyledForm = styled(Form)`
   display: flex;
-  width: 45rem;
   flex-direction: column;
-`;
-
-const StyledTextField = styled(TextField)`
-  && {
-    margin-bottom: 2.5rem;
-    input {
-      font-size: 1.5rem;
-    }
-    label {
-      font-size: 1.5rem;
-    }
-  }
+  gap: 8px; /* Reduce the gap between form fields */
 `;
 
 const AddCycle = ({ closeModel, open }) => {
@@ -34,87 +25,133 @@ const AddCycle = ({ closeModel, open }) => {
     redirectPath: "/hr/cycle",
   });
 
-  const [formValues, setFormValues] = useState({
-    status: "",
-    description: "",
-    startDate: "",
-    endDate: "",
-  });
+  const [minEndDate, setMinEndDate] = useState("");
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmitModal = async () => {
-    try {
-      closeModel();
-      await addCycle(formValues);
-    } catch (error) {
-      console.error("Error adding cycle:", error);
-    }
-  };
 
   return (
-    <Modal
-      title="Add New Cycle"
-      open={open}
-      handleClose={closeModel}
-      onSubmit={handleSubmitModal}
-    >
-      <StyledForm>
-        <TextField
-          select
-          name="status"
-          label="Status"
-          variant="outlined"
-          fullWidth
-          value={formValues.status}
-          onChange={handleChange}
-          sx={{ marginBottom: "10px" }}
-          inputProps={{ style: { fontSize: "16px" } }}
-          InputLabelProps={{ style: { fontSize: "16px" }, shrink: true }}
+    <Modal title="Add New Cycle" open={open} handleClose={closeModel}>
+      <Box sx={{ width: 400 }}>
+        <Formik
+          initialValues={{
+            status: "",
+            description: "",
+            startDate: "",
+            endDate: "",
+          }}
+          validationSchema={validationSchema}
+          onSubmit={async (values, { setSubmitting }) => {
+            try {
+              await addCycle(values);
+              closeModel();
+            } catch (error) {
+              console.error("Error adding cycle:", error);
+            }
+            setSubmitting(false);
+          }}
         >
-          <MenuItem value="planned">planned</MenuItem>
-          <MenuItem value="active">active</MenuItem>
-          <MenuItem value="completed">completed</MenuItem>
-        </TextField>
-        <StyledTextField
-          name="description"
-          label="Description"
-          variant="outlined"
-          fullWidth
-          value={formValues.description}
-          onChange={handleChange}
-        />
-        <StyledTextField
-          name="startDate"
-          label="Start Date"
-          variant="outlined"
-          type="date"
-          fullWidth
-          inputProps={{ style: { fontSize: "16px" } }}
-          InputLabelProps={{ style: { fontSize: "16px" }, shrink: true }}
-          value={formValues.startDate}
-          onChange={handleChange}
-        />
-        <StyledTextField
-          name="endDate"
-          label="End Date"
-          variant="outlined"
-          type="date"
-          inputProps={{ style: { fontSize: "16px" } }}
-          InputLabelProps={{ style: { fontSize: "16px" }, shrink: true }}
-          fullWidth
-          value={formValues.endDate}
-          onChange={handleChange}
-        />
-      </StyledForm>
+          {({ isSubmitting, errors, touched }) => (
+            
+            <StyledForm>
+              <Field
+                as="select"
+                name="status"
+                placeholder="Status"
+               sx={{ marginBottom: "3px", width: "70%" }}
+                style={{ width: "100%", height: "50px" }}
+              >
+                <option value="" disabled>
+                  Select Status
+                </option>
+                <option value="planned">planned</option>
+                <option value="active">active</option>
+                <option value="completed">completed</option>
+              </Field>
+              {errors.status && touched.status && (
+                <Box
+                  sx={{
+                    bottom: "-12px" ,
+                    color: "red",
+                    fontSize: "8px",
+                  }}
+                >
+                  {errors.status}
+                </Box>
+              )}
+
+              <Field
+                name="description"
+                placeholder="Description"
+                variant="outlined"
+                style={{ width: "100%", height: "50px" }}
+              />
+              {errors.description && touched.description && (
+                <Box
+                  sx={{
+                    bottom: "-12px" /* Reduce the bottom value */,
+                    color: "red",
+                    fontSize: "8px",
+                  }}
+                >
+                  {errors.description}
+                </Box>
+              )}
+              <Field
+                name="startDate"
+                label="Start Date"
+                variant="outlined"
+                type="date"
+                style={{ width: "100%", height: "50px" }}
+                min={new Date().toISOString().split("T")[0]}
+              />
+              {errors.startDate && touched.startDate && (
+                <Box
+                  sx={{
+                    bottom: "-12px" /* Reduce the bottom value */,
+                    color: "red",
+                    fontSize: "8px",
+                  }}
+                >
+                  {errors.startDate}
+                </Box>
+              )}
+
+              <Field
+                name="endDate"
+                label="End Date"
+                variant="outlined"
+                type="date"
+                style={{ width: "100%", height: "50px" }}
+                min={minEndDate}
+              />
+              {errors.endDate && touched.endDate && (
+                <Box
+                  sx={{
+                    bottom: "-12px" /* Reduce the bottom value */,
+                    color: "red",
+                    fontSize: "8px",
+                  }}
+                >
+                  {errors.endDate}
+                </Box>
+              )}
+              <Button type="submit" disabled={isSubmitting}>
+                Submit
+              </Button>
+            </StyledForm>
+          )}
+        </Formik>
+      </Box>
     </Modal>
   );
 };
 
 export default AddCycle;
+
+const validationSchema = Yup.object().shape({
+  status: Yup.string().required("Status is required"),
+  description: Yup.string().required("Description is required"),
+  startDate: Yup.date().required("Start Date is required"),
+  endDate: Yup.date()
+    .required("End Date is required")
+    .min(Yup.ref("startDate"), "End Date must be after Start Date"),
+});

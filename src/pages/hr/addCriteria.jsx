@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import TextField from "@mui/material/TextField";
 import Button from "../../ui/Button";
-import styled from "styled-components"; // Import styled-components
+import styled from "styled-components";
 import Row from "../../ui/Row";
 import { MenuItem } from "@mui/material";
-import { Margin } from "@mui/icons-material";
 import { useAddEntity } from "../../hooks/useCustomeMutation";
 import Textarea from "../../ui/Textarea";
+
 const StyledTable = styled.table`
   width: 100%;
   border-collapse: collapse;
@@ -46,6 +46,7 @@ const AddCriteria = () => {
     invalidateQueries: "templetes",
     redirectPath: "/hr/criteria",
   });
+
   const [rows, setRows] = useState([
     {
       id: 1,
@@ -96,8 +97,24 @@ const AddCriteria = () => {
           }
           if (!values[`weight-${row.id}`]) {
             errors[`weight-${row.id}`] = "Required";
+          } else if (
+            isNaN(values[`weight-${row.id}`]) ||
+            values[`weight-${row.id}`] <= 0
+          ) {
+            errors[`weight-${row.id}`] = "Weight must be a positive number";
           }
         });
+
+        const newRows = rows.filter((row) => !values[`category-${row.id}`]);
+        newRows.forEach((row) => {
+          errors[`category-${row.id}`] = "Required";
+          errors[`criteria-${row.id}`] = "Required";
+          errors[`weight-${row.id}`] = "Required";
+        });
+
+        if (!values.criteriaType) {
+          errors.criteriaType = "Required";
+        }
         return errors;
       }}
       onSubmit={(values, { setSubmitting }) => {
@@ -151,6 +168,11 @@ const AddCriteria = () => {
               Peer-Administrative-To-Administrative
             </MenuItem>
           </Field>
+          <ErrorMessage
+            name="criteriaType"
+            component="div"
+            style={{ color: "red", fontSize: "8px" }}
+          />
         </Row>
         <StyledTable>
           <thead>
@@ -173,7 +195,11 @@ const AddCriteria = () => {
                     InputLabelProps={{ style: { fontSize: "16px" } }}
                     fullWidth
                   />
-                  <ErrorMessage name={`category-${row.id}`} component="div" />
+                  <ErrorMessage
+                    name={`category-${row.id}`}
+                    component="div"
+                    style={{ color: "red", fontSize: "8px" }}
+                  />
                 </StyledTd>
                 <StyledTd>
                   <Field
@@ -185,7 +211,11 @@ const AddCriteria = () => {
                     variant="outlined"
                     fullWidth
                   />
-                  <ErrorMessage name={`criteria-${row.id}`} component="div" />
+                  <ErrorMessage
+                    name={`criteria-${row.id}`}
+                    component="div"
+                    style={{ color: "red", fontSize: "8px" }}
+                  />
                 </StyledTd>
                 <StyledTd>
                   <Field
@@ -198,7 +228,11 @@ const AddCriteria = () => {
                     variant="outlined"
                     fullWidth
                   />
-                  <ErrorMessage name={`weight-${row.id}`} component="div" />
+                  <ErrorMessage
+                    name={`weight-${row.id}`}
+                    component="div"
+                    style={{ color: "red", fontSize: "8px" }}
+                  />
                 </StyledTd>
               </tr>
             ))}

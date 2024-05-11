@@ -14,13 +14,8 @@ import {
   FaUserFriends,
   FaUsers,
   FaSearch,
-  FaChalkboardTeacher,
   FaChartBar,
-  FaBookOpen,
-  FaExclamationCircle,
 } from "react-icons/fa";
-import { BsPerson } from "react-icons/bs";
-
 import { MdPeople } from "react-icons/md";
 
 import { HiOutlineLogout } from "react-icons/hi";
@@ -76,25 +71,13 @@ const SubmenuContainer = styled.div`
 const SubmenuToggle = styled.div`
   display: flex;
   align-items: center;
-  gap: ${(props) => (props.hasGap ? "1.2rem" : "0")};
+  gap: 1.2rem;
   cursor: pointer;
 `;
 
 const MainNav = () => {
   const { user } = useUser();
-
-  const [isEvaluateOpen, setEvaluateOpen] = useState(false);
-  const [isResultOpen, setResultOpen] = useState(false);
-
-  const toggleEvaluateSubmenu = () => {
-    setEvaluateOpen(!isEvaluateOpen);
-    setResultOpen(false);
-  };
-
-  const toggleResultSubmenu = () => {
-    setResultOpen(!isResultOpen);
-    setEvaluateOpen(false);
-  };
+  const [isSubmenuOpen, setSubmenuOpen] = useState(false);
 
   const links = {
     admin: [
@@ -106,35 +89,48 @@ const MainNav = () => {
         icon: <FaFolderOpen />,
       },
       { path: "/admin/users", title: "Users", icon: <MdPeople /> },
-      {
-        path: "/admin/compalint",
-        title: "Complaint",
-        icon: <FaExclamationCircle />,
-      },
     ],
     teamLeader: [
       { path: "/teamleader/dashboard", title: "Home", icon: <HiOutlineHome /> },
+      { path: "/teamleader/Users", title: "Add User", icon: <FaUserPlus /> },
 
-      { path: "/teamleader/Userss", title: "Add User", icon: <FaUserPlus /> },
+      { path: "/teamleader/TmResult", title: "Result", icon: <FaUserPlus /> },
     ],
     hr: [
       { path: "/hr/dashboard", title: "Home", icon: <HiOutlineHome /> },
       { path: "/hr/user", title: "Add User", icon: <FaUserPlus /> },
       { path: "/hr/criteria", title: "Criterias", icon: <Assessment /> },
       { path: "/hr/cycle", title: "Cycle", icon: <Loop /> },
+      { path: "/admin/users", title: "Users", icon: <Loop /> },
+      
+
     ],
     head: [
       { path: "/head/dashboard", title: "Home", icon: <HiOutlineHome /> },
-      {
-        path: "/head/courses",
-        title: "Courses",
-        icon: <FaChalkboardTeacher />,
-      },
-      { path: "/head/user", title: "User", icon: <FaUserPlus /> },
+      { path: "/head/courses", title: "Courses", icon: <FaUserPlus /> },
+      { path: "/head/approve", title: "Approve", icon: <FaSearch /> },
     ],
     student: [
       { path: "/student/dashboard", title: "Home", icon: <HiOutlineHome /> },
-      { path: "/student/course", title: "Courses", icon: <FaBookOpen /> },
+    ],
+    administrative: [
+      {
+        path: "/administrative/dashboard",
+        title: "Home",
+        icon: <HiOutlineHome />,
+      },
+    ],
+    academic: [
+      { path: "/academic/dashboard", title: "Home", icon: <HiOutlineHome /> },
+    ],
+    instructor: [
+      { path: "/instructor/dashboard", title: "Home", icon: <HiOutlineHome /> },
+    ],
+    assistance: [
+      { path: "/assistance/dashboard", title: "Home", icon: <HiOutlineHome /> },
+    ],
+    director: [
+      { path: "/director/dashboard", title: "Home", icon: <HiOutlineHome /> },
     ],
   };
 
@@ -144,68 +140,115 @@ const MainNav = () => {
       icon: <FaChartBar />,
       submenu: [
         { path: "/evaluate/peer", title: "Peer", icon: <FaUserFriends /> },
-
-        user.role !== "instructor" &&
-          user.role !== "acadamic" &&
-          user.role !== "assistance" &&
-          user.role !== "adminstrative" && {
-            path: "/evaluate/subordinate",
-            title: "Subordinate",
-            icon: <FaUsers />,
-          },
-        ,
-        ...(user.role !== "head" &&
-        user.role !== "dean" &&
-        user.role !== "acadamic" &&
-        user.role !== "instructor" &&
-        user.role !== "head" &&
-        user.role !== "assistance" &&
-        user.role !== "director"
-          ? [{ path: "/evaluate/self", title: "Self", icon: <FaUserFriends /> }]
-          : []),
+        { path: "/evaluate/subordinate", title: "Subordinate", icon: <FaUsers /> },
+        { path: "/evaluate/self", title: "Self", icon: <FaUserFriends /> },
+        { path: "/evaluate/instructor", title: "Instructor", icon: <FaUserFriends /> },
       ],
     },
   ];
 
-  const commonSectiontwo = [
-    {
-      title: "Result",
-      icon: <FaBookOpen />,
-      submenu: [
-        user.role === "director" ||
-        user.role === "teamLeader" ||
-        user.role === "dean" ||
-        user.role === "head"
-          ? {
-              path: "/result/subbordinate-result",
-              title: "Subordinate",
-              icon: <FaUsers />, //
-            }
-          : [],
-        {
-          path: "/result/self-result",
-          title: "Self",
-          icon: <BsPerson />,
-        },
-      ],
-    },
-  ];
   const roleLinks = {
-    admin: [...(links.admin || [])],
+    admin: [
+      ...(links.admin || []),
+      
+    ],
     teamLeader: [
       ...(links.teamLeader || []),
-      ...commonSection,
-      ...commonSectiontwo,
+      {
+        ...commonSection[0],
+        submenu: commonSection[0].submenu.filter(
+          (sublink) => sublink.title !== "Instructor"
+        ),
+      },
+    ],
+    director: [
+      {
+        ...commonSection[0],
+        submenu: commonSection[0].submenu.filter(
+          (sublink) => sublink.title !== "Instructor"
+        ),
+      },
     ],
     hr: [...(links.hr || [])],
-    head: [...(links.head || []), ...commonSection, ...commonSectiontwo],
-    student: [...(links.student || [])],
-    dean: [...(links.dean || []), ...commonSection, ...commonSectiontwo],
-    director: [...commonSection, ...commonSectiontwo],
-    instructor: [...commonSection, ...commonSectiontwo],
-    assistance: [...commonSection, ...commonSectiontwo],
-    acadamic: [...commonSection, ...commonSectiontwo],
-    adminstrative: [...commonSection, ...commonSectiontwo],
+    head: [
+      ...(links.head || []),
+      {
+        ...commonSection[0],
+        submenu: commonSection[0].submenu.filter(
+          (sublink) =>
+            sublink.title !== "Instructor" && sublink.title !== "Self"
+        ),
+      },
+    ],
+    student: [
+      ...(links.student || []),
+      {
+        ...commonSection[0],
+        submenu: commonSection[0].submenu.filter(
+          (sublink) => sublink.title === "Instructor"
+        ),
+      },
+    ],
+    dean: [
+      ...(links.dean || []),
+      {
+        ...commonSection[0],
+        submenu: commonSection[0].submenu.filter(
+          (sublink) =>
+            sublink.title !== "Instructor" && sublink.title !== "Self"
+        ),
+      },
+    ],
+    administrative: [
+      ...(links.administrative || []),
+      {
+        ...commonSection[0],
+        submenu: commonSection[0].submenu.filter(
+          (sublink) =>
+            sublink.title !== "Instructor" && sublink.title !== "Subordinate"
+        ),
+      },
+    ],
+    academic: [
+      ...(links.academic || []),
+      {
+        ...commonSection[0],
+        submenu: commonSection[0].submenu.filter(
+          (sublink) => sublink.title === "Peer"
+        ),
+      },
+    ],
+    instructor: [
+      ...(links.instructor || []),
+      {
+        ...commonSection[0],
+        submenu: commonSection[0].submenu.filter(
+          (sublink) => sublink.title === "Peer"
+        ),
+      },
+    ],
+    assistance: [
+      ...(links.assistance || []),
+      {
+        ...commonSection[0],
+        submenu: commonSection[0].submenu.filter(
+          (sublink) => sublink.title === "Peer"
+        ),
+      },
+    ],
+    director: [
+      ...(links.director || []),
+      {
+        ...commonSection[0],
+        submenu: commonSection[0].submenu.filter(
+          (sublink) => sublink.title !== "Instructor"
+        ),
+      },
+    ],
+  };
+
+  const toggleSubmenu = () => {
+    setSubmenuOpen(!isSubmenuOpen);
   };
 
   return (
@@ -215,33 +258,13 @@ const MainNav = () => {
           <li key={index}>
             {link.submenu ? (
               <>
-                <SubmenuToggle
-                  onClick={
-                    link.title === "Evaluate"
-                      ? toggleEvaluateSubmenu
-                      : toggleResultSubmenu
-                  }
-                >
+                <SubmenuToggle onClick={toggleSubmenu}>
                   <StyledNavLink to={link.path} activeClassName="active">
                     {link.icon}
                     <div>{link.title}</div>
                   </StyledNavLink>
                 </SubmenuToggle>
-                {link.title === "Evaluate" && isEvaluateOpen && (
-                  <SubmenuContainer>
-                    {link.submenu.map((sublink, subIndex) => (
-                      <StyledNavLink
-                        key={subIndex}
-                        to={sublink.path}
-                        activeClassName="active"
-                      >
-                        {sublink.icon}
-                        {sublink.title}
-                      </StyledNavLink>
-                    ))}
-                  </SubmenuContainer>
-                )}
-                {link.title === "Result" && isResultOpen && (
+                {isSubmenuOpen && (
                   <SubmenuContainer>
                     {link.submenu.map((sublink, subIndex) => (
                       <StyledNavLink
