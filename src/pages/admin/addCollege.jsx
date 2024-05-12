@@ -6,9 +6,6 @@ import styled from "styled-components";
 import { useAddEntity } from "../../hooks/useCustomeMutation";
 import Modal from "../../ui/Modal";
 import { useGet } from "../../hooks/useGet";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-
 
 const AddCollege = ({ closeModal, open }) => {
   const { collectionData: users, isLoading, error } = useGet("users");
@@ -65,105 +62,74 @@ const AddCollege = ({ closeModal, open }) => {
   );
 
   return (
-    <Modal 
-      title="Add New College"
+    <Modal
+      title="Add new College"
       open={open}
       handleClose={closeModal}
       onSubmit={handleSubmitModal}
       error={error}
       isLoading={isLoading}
     >
-      <Formik
-        initialValues={{
-          Cname: "",
-          Ccode: "",
-          Dnumber: "",
-          dean: "",
-        }}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmitModal}
-      >
-        {({ isSubmitting }) => (
-          <Form>
-            <Field
-              as={TextField}
-              name="Cname"
-              label="College name"
-              variant="outlined"
-              fullWidth
-              sx={{ marginBottom: "10px" }}
-              inputProps={{ style: { fontSize: "16px" } }}
-              InputLabelProps={{ style: { fontSize: "16px" } }}
-            />
-            <ErrorMessage name="Cname" component="div" />
-            <Field
-              as={TextField}
-              name="Ccode"
-              label="College Code"
-              variant="outlined"
-              fullWidth
-              sx={{ marginBottom: "10px" }}
-              inputProps={{ style: { fontSize: "16px" } }}
-              InputLabelProps={{ style: { fontSize: "16px" } }}
-            />
-            <ErrorMessage name="Ccode" component="div" />
-            <Field
-              as={TextField}
-              name="Dnumber"
-              type="number"
-              label="Number of Departments"
-              variant="outlined"
-              fullWidth
-              sx={{ marginBottom: "10px" }}
-              inputProps={{ style: { fontSize: "16px" } }}
-              InputLabelProps={{ style: { fontSize: "16px" } }}
-            />
-            <ErrorMessage name="Dnumber" component="div" />
-            <Field
-              as={TextField}
-              select
-              name="dean"
-              label="Dean"
-              sx={{ marginBottom: "10px" }}
-              inputProps={{ style: { fontSize: "16px" } }}
-              InputLabelProps={{ style: { fontSize: "16px" } }}
-              variant="outlined"
-              fullWidth
+      <form>
+        <TextField
+          name="Cname"
+          label="College name"
+          variant="outlined"
+          fullWidth
+          value={formValues.Cname}
+          sx={{ marginBottom: "10px" }}
+          inputProps={{ style: { fontSize: "16px" } }}
+          InputLabelProps={{ style: { fontSize: "16px" } }}
+          onChange={handleChange}
+        />
+        <TextField
+          name="Ccode"
+          label="College Code"
+          variant="outlined"
+          fullWidth
+          sx={{ marginBottom: "10px" }}
+          inputProps={{ style: { fontSize: "16px" } }}
+          InputLabelProps={{ style: { fontSize: "16px" } }}
+          value={formValues.Ccode}
+          onChange={handleChange}
+        />
+        <TextField
+          name="Dnumber"
+          type="number"
+          id="Dnumber"
+          label="Number of Departments"
+          variant="outlined"
+          fullWidth
+          sx={{ marginBottom: "10px" }}
+          inputProps={{ style: { fontSize: "16px" } }}
+          InputLabelProps={{ style: { fontSize: "16px" } }}
+          value={formValues.Dnumber}
+          onChange={handleChange}
+        />
+        <TextField
+          select
+          name="dean"
+          label="Dean"
+          sx={{ marginBottom: "10px" }}
+          inputProps={{ style: { fontSize: "16px" } }}
+          InputLabelProps={{ style: { fontSize: "16px" } }}
+          variant="outlined"
+          fullWidth
+          value={formValues.dean}
+          onChange={handleChange}
+        >
+          {filteredUsers.map((user) => (
+            <MenuItem
+              key={user._id}
+              value={`${user.firstName} ${user.lastName}`}
             >
-              {filteredUsers.map((user) => (
-                <MenuItem
-                  key={user._id}
-                  value={`${user.firstName} ${user.lastName}`}
-                >
-                  {`${user.firstName} ${user.lastName}`}
-                </MenuItem>
-              ))}
-            </Field>
-            <ErrorMessage name="dean" component="div" />
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              disabled={isSubmitting}
-            >
-              Add College
-            </Button>
-          </Form>
-        )}
-      </Formik>
+              {`${user.firstName} ${user.lastName}`}
+            </MenuItem>
+          ))}
+        </TextField>
+      </form>
     </Modal>
   );
 };
 
 export default AddCollege;
-
-
-const validationSchema = Yup.object().shape({
-  Cname: Yup.string().required("College name is required"),
-  Ccode: Yup.string().required("College code is required"),
-  Dnumber: Yup.number()
-    .required("Number of departments is required")
-    .min(1, "Number of departments must be at least 1")
-    .integer("Number of departments must be an integer"),
-  dean: Yup.string().required("Dean is required"),
-});
