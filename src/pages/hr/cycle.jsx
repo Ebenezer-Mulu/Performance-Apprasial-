@@ -26,7 +26,7 @@ const Cycle = () => {
   return (
     <>
       {isAddModalOpen && (
-        <AddCycle closeModel={closeAddModal} open={isAddModalOpen} />
+        <AddCycle closeModal={closeAddModal} open={isAddModalOpen} />
       )}
       <StyledCollege>
         <Row type="horizontal">

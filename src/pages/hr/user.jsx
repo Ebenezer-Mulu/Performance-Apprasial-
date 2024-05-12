@@ -6,6 +6,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { Formik, Form, Field } from "formik";
 import Button from "../../ui/Button";
+import { TextField } from "@mui/material";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Row from "../../ui/Row";
@@ -178,7 +179,11 @@ const User = () => {
                       <Field
                         name="fname"
                         placeholder="First Name"
-                        style={{ width: "100%", height: "50px" }}
+                        style={{
+                          width: "100%",
+                          height: "50px",
+                          fontSize: "16px",
+                        }}
                       />
                       {errors.fname && touched.fname && (
                         <Box
@@ -203,7 +208,11 @@ const User = () => {
                       <Field
                         name="lname"
                         placeholder="Last Name"
-                        style={{ width: "100%", height: "50px" }}
+                        style={{
+                          width: "100%",
+                          height: "50px",
+                          fontSize: "16px",
+                        }}
                       />
                       {errors.lname && touched.lname && (
                         <Box
@@ -231,7 +240,11 @@ const User = () => {
                         name="salutation"
                         as="select"
                         sx={{ marginBottom: "10px", width: "70%" }}
-                        style={{ width: "100%", height: "50px" }}
+                        style={{
+                          width: "100%",
+                          height: "50px",
+                          fontSize: "16px",
+                        }}
                       >
                         <option value="" disabled>
                           Select Salutation
@@ -268,7 +281,11 @@ const User = () => {
                         name="date"
                         type="date"
                         max={new Date().toISOString().split("T")[0]}
-                        style={{ width: "100%", height: "50px" }}
+                        style={{
+                          width: "100%",
+                          height: "50px",
+                          fontSize: "16px",
+                        }}
                       />
                       {errors.date && touched.date && (
                         <Box
@@ -298,7 +315,11 @@ const User = () => {
                         type="number"
                         min="18"
                         max="65"
-                        style={{ width: "100%", height: "50px" }}
+                        style={{
+                          width: "100%",
+                          height: "50px",
+                          fontSize: "16px",
+                        }}
                       />
                       {errors.age && touched.age && (
                         <Box
@@ -323,7 +344,11 @@ const User = () => {
                         name="gender"
                         as="select"
                         sx={{ marginBottom: "10px", width: "70%" }}
-                        style={{ width: "100%", height: "50px" }}
+                        style={{
+                          width: "100%",
+                          height: "50px",
+                          fontSize: "16px",
+                        }}
                       >
                         <option value="" disabled>
                           Select Gender
@@ -358,7 +383,11 @@ const User = () => {
                         type="number"
                         min="0"
                         // onChange={handleFieldChange}
-                        style={{ width: "50%", height: "50px" }}
+                        style={{
+                          width: "50%",
+                          height: "50px",
+                          fontSize: "16px",
+                        }}
                       />
                       {errors.experience && touched.experience && (
                         <Box
@@ -394,7 +423,11 @@ const User = () => {
                             marginLeft: "2rem",
                             width: "75%",
                           }}
-                          style={{ width: "100%", height: "50px" }}
+                          style={{
+                            width: "100%",
+                            height: "50px",
+                            fontSize: "16px",
+                          }}
                         />
                         {errors.phone && touched.phone && (
                           <Box
@@ -424,7 +457,11 @@ const User = () => {
                             width: "75%",
                           }}
                           placeholder="Personal Email"
-                          style={{ width: "100%", height: "50px" }}
+                          style={{
+                            width: "100%",
+                            height: "50px",
+                            fontSize: "16px",
+                          }}
                         />
                         {errors.pemail && touched.pemail && (
                           <Box
@@ -457,7 +494,11 @@ const User = () => {
                           marginLeft: "2rem",
                           width: "75%",
                         }}
-                        style={{ width: "50%", height: "50px" }}
+                        style={{
+                          width: "50%",
+                          height: "50px",
+                          fontSize: "16px",
+                        }}
                       />
                       {errors.cemail && touched.cemail && (
                         <Box
@@ -489,7 +530,11 @@ const User = () => {
                         as="select"
                         placeholder="Department"
                         sx={{ marginBottom: "10px", width: "70%" }}
-                        style={{ width: "100%", height: "50px" }}
+                        style={{
+                          width: "100%",
+                          height: "50px",
+                          fontSize: "16px",
+                        }}
                       >
                         <option value="" disabled>
                           Select Department
@@ -527,7 +572,11 @@ const User = () => {
                         as="select"
                         placeholder="Branch"
                         sx={{ marginBottom: "10px", width: "70%" }}
-                        style={{ width: "100%", height: "50px" }}
+                        style={{
+                          width: "100%",
+                          height: "50px",
+                          fontSize: "16px",
+                        }}
                       >
                         <option value="" disabled>
                           Select Branch
@@ -562,7 +611,11 @@ const User = () => {
                         name="designation"
                         placeholder="Designation"
                         // onChange={handleFieldChange}
-                        style={{ width: "100%", height: "50px" }}
+                        style={{
+                          width: "100%",
+                          height: "50px",
+                          fontSize: "16px",
+                        }}
                       />
                       {errors.designation && touched.designation && (
                         <Box
@@ -587,7 +640,11 @@ const User = () => {
                         name="address"
                         // onChange={handleFieldChange}
                         sx={{ marginBottom: "10px" }}
-                        style={{ width: "100%", height: "50px" }}
+                        style={{
+                          width: "100%",
+                          height: "50px",
+                          fontSize: "16px",
+                        }}
                         placeholder="Address"
                       />
                       {errors.address && touched.address && (
@@ -647,10 +704,16 @@ const validationSchema = Yup.object().shape({
     ),
 
   pemail: Yup.string()
-    .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, "Invalid email format")
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@gmail\.com$/,
+      "Invalid email format. Please enter a valid Gmail address."
+    )
     .required("Personal email is required"),
   cemail: Yup.string()
-    .matches(/^[a-zA-Z0-9._%+-]+@wku\.com$/, "Invalid email format")
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@wku\.com$/,
+      "Invalid email format. Please enter a valid WKU address"
+    )
     .email("Invalid email format")
     .required("Company email is required"),
   department: Yup.string()
@@ -659,6 +722,11 @@ const validationSchema = Yup.object().shape({
   designation: Yup.string()
     .matches(/^[A-Za-z]+$/, "Only alphabetic characters are allowed")
     .required("Designation is required"),
-  address: Yup.string().required("Address is required"),
+  address: Yup.string()
+    .matches(
+      /^(?!\s*$)[A-Za-z0-9\s]+$/,
+      "Address must contain at least one non-space character"
+    )
+    .required("Address is required"),
   branch: Yup.string().required("Branch is required"),
 });

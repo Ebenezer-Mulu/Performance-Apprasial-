@@ -1,18 +1,20 @@
 import React from "react";
 import { TextField, MenuItem } from "@mui/material";
-import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import styled from "styled-components";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useFormik } from "formik";
+import Form from "../../ui/Form";
 import * as Yup from "yup";
 import { useGet } from "../../hooks/useGet";
 import { useAddEntity } from "../../hooks/useCustomeMutation";
 
 const StyledForm = styled(Form)`
+  padding: 5px 0;
+  margin-bottom: 0;
   display: flex;
   flex-direction: column;
   gap: 15px;
-  width:400px;
+  width: 400px;
 `;
 
 const ErrorText = styled.div`
@@ -32,91 +34,99 @@ const AddDepartment = ({ closeModal, open }) => {
     redirectPath: "/admin/departments",
   });
 
+  const formik = useFormik({
+    initialValues: {
+      Dname: "",
+      Dcode: "",
+      collegeId: "",
+    },
+    validationSchema: validationSchema,
+    validateOnChange: false,
+    validateOnBlur: true,
+  });
+
+  const handleSubmitModal = async () => {
+    console.log(values);
+    try {
+      await addNewDepartment({
+        departmentCode: values.Dcode,
+        departmentName: values.Dname,
+        collegeId: values.collegeId,
+      });
+      closeModal();
+    } catch (error) {
+      console.error("Error adding college:", error);
+    }
+  };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+
+  const { values, touched, errors, handleChange, handleBlur } = formik;
   return (
     <Modal
       title="Add New Department"
       open={open}
       handleClose={closeModal}
+      onSubmit={handleSubmitModal}
+      onBlur={handleBlur}
       error={error}
       isLoading={isLoading}
     >
-      <Formik
-        initialValues={{
-          Dname: "",
-          Dcode: "",
-          collegeId: "",
-        }}
-        validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting }) => {
-          try {
-            await addNewDepartment({
-              departmentCode: values.Dcode,
-              departmentName: values.Dname,
-              collegeId: values.collegeId,
-            });
-            setSubmitting(false);
-            closeModal();
-          } catch (error) {
-            console.error("Error adding department:", error);
-            setSubmitting(false);
-          }
-        }}
-      >
-        {({ isSubmitting }) => (
-          <StyledForm>
-            <Field
-              as={TextField}
-              name="Dname"
-              type="text"
-              label="Department Name"
-              variant="outlined"
-              fullWidth
-              inputProps={{ style: { fontSize: "16px" } }}
-              InputLabelProps={{ style: { fontSize: "16px" } }}
-            />
-            <ErrorMessage name="Dname" component={ErrorText} />
+      <StyledForm>
+        <TextField
+          name="Dname"
+          type="text"
+          label="Department Name"
+          variant="outlined"
+          onChange={handleChange}
+          onBlur={handleBlur}
+          fullWidth
+          inputProps={{ style: { fontSize: "16px" } }}
+          InputLabelProps={{ style: { fontSize: "16px" } }}
+          error={touched.Dname && Boolean(errors.Dname)}
+          helperText={touched.Dname && errors.Dname}
+        />
 
-            <Field
-              as={TextField}
-              name="Dcode"
-              type="text"
-              label="Department Code"
-              variant="outlined"
-              fullWidth
-              inputProps={{ style: { fontSize: "16px" } }}
-              InputLabelProps={{ style: { fontSize: "16px" } }}
-            />
-            <ErrorMessage name="Dcode" component={ErrorText} />
+        <TextField
+          name="Dcode"
+          type="text"
+          label="Department Code"
+          variant="outlined"
+          onChange={handleChange}
+          onBlur={handleBlur}
+          fullWidth
+          inputProps={{ style: { fontSize: "16px" } }}
+          InputLabelProps={{ style: { fontSize: "16px" } }}
+          error={touched.Dcode && Boolean(errors.Dcode)}
+          helperText={touched.Dcode && errors.Dcode}
+        />
 
-            <Field
-              as={TextField}
-              select
-              name="collegeId"
-              label="College"
-              variant="outlined"
-              fullWidth
-              inputProps={{ style: { fontSize: "16px" } }}
-              InputLabelProps={{ style: { fontSize: "16px" } }}
-            >
-              {Colleges.map((college) => (
-                <MenuItem key={college._id} value={college._id}>
-                  {college.collegeName}
-                </MenuItem>
-              ))}
-            </Field>
-            <ErrorMessage name="collegeId" component={ErrorText} />
-
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Submitting..." : "Submit"}
-            </Button>
-          </StyledForm>
-        )}
-      </Formik>
+        <TextField
+          select
+          name="collegeId"
+          label="College"
+          sx={{ marginBottom: "10px" }}
+          inputProps={{ style: { fontSize: "16px" } }}
+          InputLabelProps={{ style: { fontSize: "16px" } }}
+          variant="outlined"
+          fullWidth
+          onChange={handleChange}
+        >
+          {Colleges.map((college) => {
+            return (
+              <MenuItem key={college._id} value={college._id}>
+                {college.collegeName}
+              </MenuItem>
+            );
+          })}
+        </TextField>
+      </StyledForm>
     </Modal>
   );
 };
@@ -126,6 +136,10 @@ export default AddDepartment;
 const validationSchema = Yup.object({
   Dname: Yup.string()
     .min(2, "Department name must be at least 2 characters")
+    .matches(
+      /^[A-Za-z\s]+$/,
+      "Department name must contain only letters and spaces"
+    )
     .required("Department name is required"),
   Dcode: Yup.string()
     .matches(

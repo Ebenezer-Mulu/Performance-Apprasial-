@@ -70,7 +70,7 @@ const Courses = () => {
   return (
     <>
       {isAddModalOpen && (
-        <AddCourse closeModel={closeAddModal} open={isAddModalOpen} />
+        <AddCourse closeModal={closeAddModal} open={isAddModalOpen} />
       )}
       <StyledCollege>
         <Row type="horizontal">

@@ -1,5 +1,4 @@
 import Table from "../../ui/Table";
-
 import { useEffect, useState } from "react";
 import Button from "../../ui/Button";
 import styled from "styled-components";
@@ -7,7 +6,6 @@ import { useGet } from "../../hooks/useGet";
 import Modal from "../../ui/Modal";
 import { TextField, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
 import {
   useDeleteEntity,
   useUpdateEntity,
@@ -16,7 +14,10 @@ import DeleteConfirmationDialog from "../../ui/Dialog";
 import toast from "react-hot-toast";
 import Spinner from "../../ui/Spinner";
 import { useUser } from "../authentication/useUser";
+
+
 const UserTable = ({ searchQuery, type }) => {
+  
   const { user } = useUser();
   const isAdmin = user.role === "admin";
   const navigate = useNavigate();

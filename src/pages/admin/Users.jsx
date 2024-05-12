@@ -5,9 +5,13 @@ import Button from "../../ui/Button";
 import UserTable from "../../features/Users/UserTable";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useUser } from "../../features/authentication/useUser";
 
 const Users = () => {
   const [searchQuery, setSearchQuery] = useState("");
+
+  const { user } = useUser();
+  const isAdmin = user.role === "admin";
 
   const handleSearchChange = (value) => {
     setSearchQuery(value);
@@ -16,9 +20,11 @@ const Users = () => {
     <>
       <Row type="horizontal">
         <Heading as="h1">All Users</Heading>
-        <Button>
-          <Link to="/admin/assignRole">Assign Role</Link>
-        </Button>
+        {isAdmin && (
+          <Button>
+            <Link to="/admin/assignRole">Assign Role</Link>
+          </Button>
+        )}
       </Row>
       <Search
         onSearchChange={handleSearchChange}

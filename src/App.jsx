@@ -128,7 +128,6 @@ const App = () => {
               </Route>
               <Route path="user">
                 <Route path="userinfo" element={<UserInfo />} />
-        
               </Route>
               <Route path="result">
                 <Route path="self-result" element={<Selfresult />} />

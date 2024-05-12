@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 import { TextField, MenuItem } from "@mui/material";
-import Button from "../../ui/Button";
-import ButtonGroup from "../../ui/ButtonGroup";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useGet } from "../../hooks/useGet";
 import styled from "styled-components";
+import Form from "../../ui/Form";
 import { useAddEntity } from "../../hooks/useCustomeMutation";
 import Modal from "../../ui/Modal";
-import { useGet } from "../../hooks/useGet";
 
+const StyledForm = styled(Form)`
+  padding: 5px 0;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 400px;
+`;
 const AddCollege = ({ closeModal, open }) => {
   const { collectionData: users, isLoading, error } = useGet("users");
 
@@ -26,21 +35,25 @@ const AddCollege = ({ closeModal, open }) => {
     dean: "",
   });
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-  };
+  const formik = useFormik({
+    initialValues: {
+      Cname: "",
+      Ccode: "",
+      Dnumber: "",
+      dean: "",
+    },
+    validationSchema: validationSchema,
+    validateOnChange: false,
+    validateOnBlur: true,
+  });
 
   const handleSubmitModal = async () => {
     try {
       await addCollege({
-        collegeName: formValues.Cname,
-        collegeCode: formValues.Ccode,
-        numberOfDepartment: +formValues.Dnumber,
-        dean: formValues.dean,
+        collegeName: values.Cname,
+        collegeCode: values.Ccode,
+        numberOfDepartment: +values.Dnumber,
+        dean: values.dean,
       });
       closeModal();
     } catch (error) {
@@ -56,31 +69,40 @@ const AddCollege = ({ closeModal, open }) => {
     return <p>Error: {error.message}</p>;
   }
 
-  const filteredUsers = users.filter(
-    (user) =>
-      user.role !== "head" || user.role === "teamLeader" || user.role === "dean"
-  );
+  const { values, touched, errors, handleChange, handleBlur } = formik;
+
+  const filteredUsers = users
+    ? users.filter(
+        (user) =>
+          user.role !== "head" ||
+          user.role === "teamLeader" ||
+          user.role === "dean"
+      )
+    : [];
 
   return (
     <Modal
-      title="Add new College"
+      title="Add New College"
       open={open}
       handleClose={closeModal}
       onSubmit={handleSubmitModal}
       error={error}
       isLoading={isLoading}
     >
-      <form>
+      <StyledForm>
         <TextField
           name="Cname"
           label="College name"
           variant="outlined"
           fullWidth
-          value={formValues.Cname}
+          value={values.Cname}
           sx={{ marginBottom: "10px" }}
           inputProps={{ style: { fontSize: "16px" } }}
           InputLabelProps={{ style: { fontSize: "16px" } }}
           onChange={handleChange}
+          onBlur={handleBlur}
+          error={touched.Cname && Boolean(errors.Cname)}
+          helperText={touched.Cname && errors.Cname}
         />
         <TextField
           name="Ccode"
@@ -88,10 +110,13 @@ const AddCollege = ({ closeModal, open }) => {
           variant="outlined"
           fullWidth
           sx={{ marginBottom: "10px" }}
+          value={values.Ccode}
+          onChange={handleChange}
+          onBlur={handleBlur}
           inputProps={{ style: { fontSize: "16px" } }}
           InputLabelProps={{ style: { fontSize: "16px" } }}
-          value={formValues.Ccode}
-          onChange={handleChange}
+          error={touched.Ccode && Boolean(errors.Ccode)}
+          helperText={touched.Ccode && errors.Ccode}
         />
         <TextField
           name="Dnumber"
@@ -101,22 +126,28 @@ const AddCollege = ({ closeModal, open }) => {
           variant="outlined"
           fullWidth
           sx={{ marginBottom: "10px" }}
-          inputProps={{ style: { fontSize: "16px" } }}
-          InputLabelProps={{ style: { fontSize: "16px" } }}
-          value={formValues.Dnumber}
+          value={values.Dnumber}
           onChange={handleChange}
+          onBlur={handleBlur}
+          inputProps={{ style: { fontSize: "16px" }, min: "1" }}
+          InputLabelProps={{ style: { fontSize: "16px" } }}
+          error={touched.Dnumber && Boolean(errors.Dnumber)}
+          helperText={touched.Dnumber && errors.Dnumber}
         />
         <TextField
           select
           name="dean"
           label="Dean"
           sx={{ marginBottom: "10px" }}
-          inputProps={{ style: { fontSize: "16px" } }}
-          InputLabelProps={{ style: { fontSize: "16px" } }}
           variant="outlined"
           fullWidth
-          value={formValues.dean}
+          value={values.dean}
           onChange={handleChange}
+          onBlur={handleBlur}
+          inputProps={{ style: { fontSize: "16px" } }}
+          InputLabelProps={{ style: { fontSize: "16px" } }}
+          error={touched.dean && Boolean(errors.dean)}
+          helperText={touched.dean && errors.dean}
         >
           {filteredUsers.map((user) => (
             <MenuItem
@@ -127,9 +158,29 @@ const AddCollege = ({ closeModal, open }) => {
             </MenuItem>
           ))}
         </TextField>
-      </form>
+      </StyledForm>
     </Modal>
   );
 };
 
 export default AddCollege;
+
+const validationSchema = Yup.object().shape({
+  Cname: Yup.string().min(2, "College name must be at least 2 characters")
+    .matches(
+      /^[A-Za-z\s]+$/,
+      "College name must contain only letters and spaces"
+    )
+    .required("College name is required"),
+  Ccode:
+  Yup.string()
+  .matches(
+    /^[a-zA-Z0-9]{2,}$/,
+    "College code must contain only letters and numbers and be at least 2 characters long"
+  ),
+  Dnumber: Yup.number()
+    .required("Number of departments is required")
+    .positive("Number of departments must be positive")
+    .integer("Number of departments must be an integer"),
+  dean: Yup.string().required("Dean is required"),
+});
