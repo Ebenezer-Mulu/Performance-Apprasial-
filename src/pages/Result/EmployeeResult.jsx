@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaUserGraduate,
   FaChalkboardTeacher,
@@ -37,56 +37,36 @@ const getStatusIcon = (status) => {
   }
 };
 
-const Selfresult = () => {
+const EmployeeResult = ({ userId, cycleId, setResultData }) => {
   const { collectionData: users } = useGet("users/peers");
   const { collectionData: evalutionResult } = useGet("results");
-  const { isLoading, collectionData: data } = useGet("results/final-result");
+  const { isLoading, collectionData: data } = useGet(
+    `results/employee-result/${userId}/${cycleId}`
+  );
   const { collectionData: evalutionDetailResult } = useGet("results/detail");
 
   const navigate = useNavigate();
   const { collectionData: cycle } = useGet("cycles/active");
+
+  useEffect(() => {
+    setResultData([]);
+    if (data?.weights && data?.status === "Approved") {
+      setResultData(data?.weights);
+    }
+  }, [data, setResultData]);
   const [showComplaintModal, setShowComplaintModal] = useState(false);
   const { user: currentUser } = useUser();
 
-  const handleOpenComplaintModal = () => {
-    setShowComplaintModal(true);
-  };
-
-  const handleCloseComplaintModal = () => {
-    setShowComplaintModal(false);
-  };
   if (isLoading) {
     return <Spinner />;
   }
 
-  const filteredPeerEvalution = evalutionDetailResult?.filter((result) => {
-    return (
-      result?.evaluterRole === "peer" &&
-      result?.evaluter === currentUser?._id &&
-      result?.cycle === cycle?._id
-    );
-  });
-
-  if (filteredPeerEvalution?.length < users?.length) {
-    return (
-      <p>
-        Oops! It looks like you haven't evaluated all your peers yet. Please
-        complete all peer evaluations before viewing the results.
-      </p>
-    );
+  if (!data?.status || data?.status !== "Approved") {
+    return <p>The results are not yet approved.</p>;
   }
 
-  if (!data.status || data.status !== "Approved") {
-    return (
-      <p>
-        Hang tight! We're still processing your request. Please wait until the
-        results are approved.
-      </p>
-    );
-  }
-
-  const evalutionData = data.weights;
-  const status = data.status;
+  const evalutionData = data?.weights;
+  const status = data?.status;
 
   return (
     <>
@@ -163,24 +143,9 @@ const Selfresult = () => {
             Total Score: {evalutionData[3]?.total}
           </h3>
         </div>
-        <Button
-          style={{
-            padding: "1.5rem",
-            fontSize: "1.2rem",
-            marginLeft: "74rem",
-          }}
-          onClick={handleOpenComplaintModal}
-        >
-          Submit Complaint
-        </Button>
       </div>
-
-      <ComplaintForm
-        closeModal={handleCloseComplaintModal}
-        open={showComplaintModal}
-      />
     </>
   );
 };
 
-export default Selfresult;
+export default EmployeeResult;

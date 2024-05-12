@@ -6,8 +6,8 @@ import styled from "styled-components";
 import { useGet } from "../../hooks/useGet";
 import Modal from "../../ui/Modal";
 import { TextField, MenuItem } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-import Row from "../../ui/Row";
 import {
   useDeleteEntity,
   useUpdateEntity,
@@ -17,6 +17,9 @@ import toast from "react-hot-toast";
 import Spinner from "../../ui/Spinner";
 import { useUser } from "../authentication/useUser";
 const UserTable = ({ searchQuery, type }) => {
+  const { user } = useUser();
+  const isAdmin = user.role === "admin";
+  const navigate = useNavigate();
   let endpoint;
 
   if (type === "head") {
@@ -65,6 +68,10 @@ const UserTable = ({ searchQuery, type }) => {
     }
   };
 
+  const handleView = (row) => {
+    navigate(`/user/UserInfo/${row.id}`, { state: row });
+  };
+
   const handleUpdate = (user) => {
     setUpdateId(user.id);
     setCurrentRole(user.role);
@@ -103,23 +110,39 @@ const UserTable = ({ searchQuery, type }) => {
       const row = params.row;
       return (
         <ButtonContainer>
-          <Button
-            size="small"
-            variation="danger"
-            onClick={() => handleDeleteBtnClick(row.id)}
-          >
-            Delete
-          </Button>
-          <Button
-            style={{
-              marginLeft: "1rem",
-            }}
-            size="small"
-            variation="primary"
-            onClick={() => handleUpdate(row)}
-          >
-            Update
-          </Button>
+          {isAdmin && (
+            <>
+              <Button
+                size="small"
+                variation="danger"
+                onClick={() => handleDeleteBtnClick(row.id)}
+              >
+                Delete
+              </Button>
+              <Button
+                style={{
+                  marginLeft: "1rem",
+                }}
+                size="small"
+                variation="primary"
+                onClick={() => handleUpdate(row)}
+              >
+                Update
+              </Button>
+            </>
+          )}
+          {!isAdmin && (
+            <Button
+              style={{
+                marginLeft: "1rem",
+              }}
+              size="small"
+              variation="primary"
+              onClick={() => handleView(row)}
+            >
+              View
+            </Button>
+          )}
         </ButtonContainer>
       );
     },
@@ -162,6 +185,12 @@ const UserTable = ({ searchQuery, type }) => {
     });
   } else {
     filteredUsers = users;
+  }
+  if (!isAdmin) {
+    filteredUsers = filteredUsers?.filter(
+      (user) =>
+        user.role !== "student" && user.role !== "admin" && user.role !== "hr"
+    );
   }
   const rows =
     filteredUsers?.map((user, index) => {

@@ -53,7 +53,7 @@ const TmUsers = ({ type, searchQuery }) => {
       });
     };
 
-    if (cycle) navigateToTmeval(user);
+    if (cycle?.status === "active") navigateToTmeval(user);
     else
       alert(
         "The evaluation has not yet started. Please wait for the evaluation to begin ."

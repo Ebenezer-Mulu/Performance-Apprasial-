@@ -74,7 +74,6 @@ const User = () => {
       pemail: email,
       cemail: companyEmail,
       department,
-      college,
       designation,
       address,
       branch,

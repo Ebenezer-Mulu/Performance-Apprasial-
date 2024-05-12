@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Rating } from "@mui/material";
 import { useGet } from "../../hooks/useGet";
 import { useAddEntity } from "../../hooks/useCustomeMutation";
-import DeleteConfirmationDialog from "../../ui/Dialog";
+
 import { Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import Button from "../../ui/Button";

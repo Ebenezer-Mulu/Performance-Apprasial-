@@ -14,6 +14,7 @@ import {
   FaUserFriends,
   FaUsers,
   FaSearch,
+  FaRegChartBar,
   FaChalkboardTeacher,
   FaChartBar,
   FaBookOpen,
@@ -122,6 +123,7 @@ const MainNav = () => {
       { path: "/hr/user", title: "Add User", icon: <FaUserPlus /> },
       { path: "/hr/criteria", title: "Criterias", icon: <Assessment /> },
       { path: "/hr/cycle", title: "Cycle", icon: <Loop /> },
+      { path: "/hr/users", title: "Users", icon: <FaUsers /> },
     ],
     head: [
       { path: "/head/dashboard", title: "Home", icon: <HiOutlineHome /> },
@@ -131,6 +133,7 @@ const MainNav = () => {
         icon: <FaChalkboardTeacher />,
       },
       { path: "/head/user", title: "User", icon: <FaUserPlus /> },
+      { path: "/head/report", title: "Report", icon: <FaFolderOpen /> },
     ],
     student: [
       { path: "/student/dashboard", title: "Home", icon: <HiOutlineHome /> },

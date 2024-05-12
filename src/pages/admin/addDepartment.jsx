@@ -110,7 +110,6 @@ const AddDepartment = ({ closeModal, open }) => {
           InputLabelProps={{ style: { fontSize: "16px" } }}
           variant="outlined"
           fullWidth
-          value={formValues.dean}
           onChange={handleChange}
         >
           {Colleges.map((college) => {

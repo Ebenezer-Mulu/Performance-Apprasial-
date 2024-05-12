@@ -10,8 +10,9 @@ function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, isLoading } = useLogin();
-
+  const [submmiting, setIsSubmiting] = useState(false);
   function handleSubmit(e) {
+    setIsSubmiting(true);
     e.preventDefault();
     if (!email || !password) return;
     login(
@@ -20,6 +21,9 @@ function LoginForm() {
         onSettled: () => {
           setEmail("");
           setPassword("");
+        },
+        onError: () => {
+          setIsSubmiting(false);
         },
       }
     );
@@ -34,7 +38,7 @@ function LoginForm() {
           autoComplete="username"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          disabled={isLoading}
+          disabled={submmiting}
         />
       </FormRowVertical>
 
@@ -45,12 +49,12 @@ function LoginForm() {
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          disabled={isLoading}
+          disabled={submmiting}
         />
       </FormRowVertical>
       <FormRowVertical>
-        <Button size="large" disabled={isLoading}>
-          {!isLoading ? "Log in" : <SpinnerMini />}
+        <Button size="large" disabled={submmiting}>
+          {!submmiting ? "Log in" : <SpinnerMini />}
         </Button>
       </FormRowVertical>
     </Form>

@@ -10,7 +10,7 @@ import Users from "./pages/admin/Users";
 import AssignRole from "./pages/admin/assignRole";
 import AddCollege from "./pages/admin/addCollege";
 import AddDepartment from "./pages/admin/addDepartment";
-
+import UserInfo from "./pages/user/userinfo";
 import UpdatePasswordForm from "./features/authentication/UpdatePasswordForm";
 import ForgotPassword from "./pages/ForgotPassword";
 
@@ -37,6 +37,7 @@ import ProtectedRoute from "./ui/ProtectedRoute";
 // Import other pages here
 import StudentDashboard from "./pages/student/Dashboard";
 import PageNotFound from "./pages/PageNotFound";
+
 import Login from "./pages/Login";
 import Cycle from "./pages/hr/cycle";
 import Account from "./pages/Account";
@@ -64,7 +65,6 @@ const queryClient = new QueryClient({
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools />
       <DarkModeProvider>
         <GlobalStyles />
         <BrowserRouter>
@@ -93,6 +93,7 @@ const App = () => {
                 <Route path="user" element={<AddUser />} />
                 <Route path="criteria" element={<Criteria />} />
                 <Route path="cycle" element={<Cycle />} />
+                <Route path="users" element={<Users />} />
                 <Route path="addCriteria" element={<AddCriteria />} />
               </Route>
 
@@ -105,7 +106,7 @@ const App = () => {
                 <Route path="addCourse" element={<AddCourse />} />
                 <Route path="courses" element={<Courses />} />
                 <Route path="evaluate" element={<Evaluate />} />
-                <Route path="approve" element={<Approve />} />
+                <Route path="report" element={<Approve />} />
               </Route>
               <Route path="student">
                 <Route path="dashboard" element={<StudentDashboard />} />
@@ -131,6 +132,9 @@ const App = () => {
                   path="subbordinate-result"
                   element={<Subbordinateresult />}
                 />
+              </Route>
+              <Route path="user">
+                <Route path="userinfo/:id" element={<UserInfo />} />
               </Route>
             </Route>
             <Route path="login" element={<Login />} />

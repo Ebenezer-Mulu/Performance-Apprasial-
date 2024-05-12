@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { MdModeEditOutline } from "react-icons/md";
 import { TextField } from "@mui/material";
 import Row from "../ui/Row";
-
 import Button from "../ui/Button";
 import { useUser } from "../features/authentication/useUser";
 import Spinner from "../ui/Spinner";
@@ -36,6 +35,11 @@ const EditIcon = styled(MdModeEditOutline)`
 
 const StyledField = styled(TextField)`
   width: 350px;
+`;
+
+const CameraIcon = styled.div`
+  font-size: 3rem;
+  cursor: pointer;
 `;
 
 function Account() {
@@ -71,8 +75,10 @@ function Account() {
     const file = event.target.files[0];
     setFile(file);
     if (file) {
+      console.log(file);
       setSelectedImage(URL.createObjectURL(file));
     }
+    event.target.value = null;
   };
 
   const handleUpdate = () => {
@@ -91,18 +97,19 @@ function Account() {
       [field]: value,
     }));
   };
+
   return (
     <StyledUser>
-      {editedData.avatar ? (
-        <img
-          src={editedData.avatar}
-          alt="Avatar"
-          style={{ width: "150px", height: "150px", borderRadius: "50%" }}
-        />
-      ) : selectedImage ? (
+      {selectedImage ? (
         <img
           src={selectedImage}
           alt="Selected"
+          style={{ width: "150px", height: "150px", borderRadius: "50%" }}
+        />
+      ) : editedData.avatar ? (
+        <img
+          src={editedData.avatar}
+          alt="Avatar"
           style={{ width: "150px", height: "150px", borderRadius: "50%" }}
         />
       ) : (
@@ -115,6 +122,7 @@ function Account() {
         style={{ display: "none" }}
         onChange={handleImageUpload}
       />
+      <CameraIcon onClick={handleUpload}>📷</CameraIcon>
       <Row>
         <Row type="horizontal">
           <StyledField

@@ -31,7 +31,12 @@ export function useLogin() {
     },
     onError: (err) => {
       console.log("ERROR", err);
-      toast.error("Provided email or password are incorrect");
+      let message =
+        err?.response?.data?.msg || "Server error. Please try again later.";
+
+      if (err.code === "ERR_BAD_RESPONSE")
+        message = "Server error. Please try again later.";
+      toast.error(message);
     },
   });
 
